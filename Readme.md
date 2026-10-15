@@ -117,8 +117,7 @@ AI tools were used to speed up test-case drafting. Every test case was executed 
 ```
 .
 ├── README.md
-├── SRS/
-│   └── SRS_Complete_Guru99_Banking.docx
+├── SRS_Complete_Guru99_Banking.docx
 └── Test-Artifacts/
     └── Guru99_Bank_Test_Plan_Updated.xlsx
 ```
