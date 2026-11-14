@@ -1,0 +1,2855 @@
+"Section","Title","Preconditions","Steps","Test Data","Expected Result","Priority","References"
+"Login & Logout","TC_LG_001 - Successful login as Manager","Objective: Verify that a Manager can log in with valid credentials
+Manager account exists and is active; Login page is open in Chrome","1. Enter User ID
+2. Enter Password
+3. Click Submit","User ID: mngr668217
+Password: rUqyzUv","User is redirected to the Manager Dashboard, and all Manager modules are displayed","High","3.1.1"
+"Login & Logout","TC_LG_002 - Empty User ID","Objective: Verify that login is blocked when User ID is empty
+Login page is open","1. Leave User ID empty
+2. Enter Password
+3. Click Submit","User ID:
+Password: rUqyzUv","E1: ""User ID must not be blank"" is displayed; login is not allowed","High","L1"
+"Login & Logout","TC_LG_003 - Empty Password","Objective: Verify that login is blocked when Password is empty
+Login page is open","1. Enter User ID
+2. Leave Password empty
+3. Click Submit","User ID: mngr668217
+Password:","E2: ""Password must not be blank"" is displayed; login is not allowed","High","L2"
+"Login & Logout","TC_LG_004 - Both fields empty","Objective: Verify validation messages when both fields are empty
+Login page is open","1. Leave both fields empty
+2. Click Submit","User ID:
+Password:","E1 and E2 are displayed; login is not allowed","High","L1, L2"
+"Login & Logout","TC_LG_005 - Non-existent User ID","Objective: Verify that an unregistered User ID is rejected
+Login page is open; the User ID does not exist in the system","1. Enter an unregistered User ID
+2. Enter any Password
+3. Click Submit","User ID: ghost999
+Password: Pass@123","E3: ""User ID and Password do not match"" is displayed","High","L3"
+"Login & Logout","TC_LG_006 - Incorrect Password","Objective: Verify that a valid User ID with a wrong Password is rejected
+Manager account exists and is active","1. Enter a valid User ID
+2. Enter an incorrect Password
+3. Click Submit","User ID: mngr668217
+Password: wrongpas","E3 is displayed; login is not allowed","High","L3"
+"Login & Logout","TC_LG_007 - Case sensitivity: User ID","Objective: Verify that the User ID is case-sensitive
+Manager account ""mngr668217"" exists","1. Enter the User ID in uppercase
+2. Enter the correct Password
+3. Click Submit","User ID: MNGR668217
+Password: rUqyzUv","E3 is displayed (login rejected)","Medium","3.1.1"
+"Login & Logout","TC_LG_008 - Case sensitivity: Password","Objective: Verify that the Password is case-sensitive
+Manager account ""mngr668217"" exists with password ""rUqyzUv""","1. Enter the correct User ID
+2. Enter the Password with different casing
+3. Click Submit","User ID: mngr668217
+Password: RUQYZUV","E3 is displayed (login rejected)","Medium","3.1.1"
+"Login & Logout","TC_LG_009 - Lockout after 3 failed attempts","Objective: Verify that the account is locked after 3 consecutive failed login attempts
+Manager account is active and not locked; failed-attempt counter is 0","1. Enter valid User ID and wrong Password, click Submit
+2. Repeat step 1 (2nd attempt)
+3. Repeat step 1 (3rd attempt)","User ID: mngr668217
+Password: wrongpas (wrong password, 3 consecutive attempts)","Attempts 1 and 2: E3 is displayed.
+Attempt 3: the account is locked and E55 is displayed (SRS is unclear about the 3rd-attempt message)","High","L5"
+"Login & Logout","TC_LG_010 - Locked account with valid credentials","Objective: Verify that a locked account cannot log in even with correct credentials
+Account is locked (after TC_LG_009)","1. Enter valid User ID
+2. Enter correct Password
+3. Click Submit","User ID: mngr668217
+Password: rUqyzUv (valid password)","Login is rejected with the lockout message (E55)","High","L4"
+"Login & Logout","TC_LG_011 - Reset button","Objective: Verify that the Reset button clears the form
+Login page is open","1. Enter data in both fields
+2. Click Reset","User ID: mngr668217
+Password: rUqyzUv","Both fields are cleared, and no error messages are displayed","Medium","3.1.1"
+"Login & Logout","TC_LG_012 - Password masking","Objective: Verify that the Password field masks the input
+Login page is open","1. Type in the Password field","Password: rUqyzUv","Characters are displayed as dots/asterisks","High","3.1.1"
+"Login & Logout","TC_LG_013 - Maximum length of 30 characters","Objective: Verify the 30-character limit on User ID and Password
+Login page is open","1. Enter 30 characters in User ID and Password
+2. Enter 31 characters in both fields","User ID: AbcdefghijAbcdefghijAbcdefghij (30 characters), then AbcdefghijAbcdefghijAbcdefghijk (31 characters)
+Password: AbcdefghijAbcdefghijAbcdefghij (30 characters), then AbcdefghijAbcdefghijAbcdefghijk (31 characters)","30 characters are accepted as the maximum; the 31st character is rejected or truncated","Medium","3.1.1"
+"Login & Logout","TC_LG_014 - Basic SQL injection","Objective: Verify that the login form is not vulnerable to basic SQL injection
+Login page is open","1. Enter ' OR '1'='1 in User ID
+2. Enter any Password
+3. Click Submit","User ID: ' OR '1'='1
+Password: x","Login is rejected (E3); no access is granted and no database error is displayed","High","Security (3.2.4)"
+"Login & Logout","TC_LG_015 - Space inside User ID","Objective: Verify how the system handles a space inside the User ID
+Manager account ""mngr668217"" exists","1. Enter a User ID that contains a space
+2. Enter the correct Password
+3. Click Submit","User ID: mngr 668217 (space inside)
+Password: rUqyzUv","Behavior is consistent (rejected or trimmed); document the actual behavior","Low","3.1.1"
+"Login & Logout","TC_LG_016 - Logout","Objective: Verify that Logout ends the session
+User is logged in","1. Click Logout","User ID: mngr668217","User is returned to the Login page, and the session is terminated","High","2.0"
+"Login & Logout","TC_LG_017 - Browser Back button after Logout","Objective: Verify that a protected page cannot be accessed via Back after Logout
+User has just logged out","1. Click the browser's Back button","","User cannot return to a protected page without logging in","High","2.0"
+"Login & Logout","TC_LG_018 - Access without login","Objective: Verify that protected pages require authentication
+User is not logged in; a valid internal page URL is available","1. Open an internal page URL directly in the browser","Direct URL of an internal page","User is redirected to the Login page","High","RBAC"
+"New Customer","TC_NC_001 - Create customer with valid data","Objective: Verify a customer is created with all valid fields
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith01@test.com
+Password: Pass@123","Customer is created; a unique Customer ID is generated and a confirmation is displayed","High","3.1.2"
+"New Customer","TC_NC_002 - Form fields and buttons","Objective: Verify all fields in SRS 3.1.2 exist
+1. Logged in as Manager
+2. New Customer page is open","1. Open the New Customer page
+2. Review the form","","Customer Name, Gender (Male/Female radio), Date of Birth (date picker), Address (textarea), City, State, PIN Code, Mobile Number, Email, Password, Submit and Reset are present","Medium","3.1.2"
+"New Customer","TC_NC_003 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Reset","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith03@test.com
+Password: Pass@123","All fields are cleared, Gender is deselected, and no error is displayed","Medium","3.1.2"
+"New Customer","TC_NC_004 - Unique Customer ID","Objective: Verify each new customer gets a different ID
+1. Logged in as Manager
+2. New Customer page is open","1. Create customer A using the Customer A values
+2. Create customer B using the Customer B values","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: Customer A: john.smith04a@test.com
+Customer B: john.smith04b@test.com ◄
+Password: Pass@123","Two different Customer IDs are generated","High","3.1.2"
+"New Customer","TC_NC_005 - Created customer data is saved correctly","Objective: Verify saved details via Edit Customer
+1. Logged in as Manager
+2. Customer created in TC_NC_001 (Customer ID 4073)","1. Open the Edit Customer page
+2. Enter the generated Customer ID
+3. Submit","Customer ID: 4073
+
+Values to compare (from TC_NC_001):
+Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith01@test.com
+Password: Pass@123","All entered details (name, gender, DOB, address, city, state, PIN, mobile, email) match what was entered","High","3.1.2"
+"New Customer","TC_NC_006 - Name: blank (NC1)","Objective: Verify blank name is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Customer Name empty and enter the rest from Test data
+2. Click Submit","Customer Name: (empty) ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith06@test.com
+Password: Pass@123","E4: ""Customer Name must not be blank""; no customer created","High","NC1"
+"New Customer","TC_NC_007 - Name: numbers (NC2)","Objective: Verify numbers are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John123 ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith07@test.com
+Password: Pass@123","E48: ""Numbers are not allowed""","High","NC2"
+"New Customer","TC_NC_008 - Name: special characters (NC3)","Objective: Verify special characters are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John@#$ ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith08@test.com
+Password: Pass@123","E46: ""Special characters are not allowed""","High","NC3"
+"New Customer","TC_NC_009 - Name: leading space (NC4)","Objective: Verify a leading space is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: "" John"" (a space, then John) ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith09@test.com
+Password: Pass@123","E47: ""First character cannot be space""","Medium","NC4"
+"New Customer","TC_NC_010 - Name: spaces between words","Objective: Verify a valid multi-word name is accepted
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: Mary Ann Lee ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith10@test.com
+Password: Pass@123","Customer is created successfully","Medium",""
+"New Customer","TC_NC_011 - Name: max length 50 (BVA)","Objective: Verify the 50-character limit
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page, enter the values of Attempt 2, click Submit","Customer Name:
+   [Attempt 1] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghij (50 letters)
+   [Attempt 2] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghijk (51 letters) ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] john.smith11a@test.com
+   [Attempt 2] john.smith11b@test.com
+Password: Pass@123","50 characters are accepted; the 51st is rejected or truncated","Medium",""
+"New Customer","TC_NC_012 - Gender: not selected (NC20)","Objective: Verify Gender is mandatory
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Gender unselected and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: (none selected) ◄
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith12@test.com
+Password: Pass@123","An error is displayed and no customer is created (message not defined in SRS)","High","NC20"
+"New Customer","TC_NC_013 - Gender: single selection","Objective: Verify only one option can be selected
+1. Logged in as Manager
+2. New Customer page is open","1. Select Male
+2. Select Female","Gender: Male, then Female","Selecting Female deselects Male","Low",""
+"New Customer","TC_NC_014 - DOB: blank (NC18)","Objective: Verify blank DOB is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Date of Birth empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: (empty) ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith14@test.com
+Password: Pass@123","E50: ""Date of Birth must not be blank""","High","NC18"
+"New Customer","TC_NC_015 - DOB: age exactly 18 (BVA)","Objective: Verify a customer who is exactly 18 today is accepted
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: Execution date − 18 years ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith15@test.com
+Password: Pass@123","Customer is created successfully","High",""
+"New Customer","TC_NC_016 - DOB: one day under 18 (BVA)","Objective: Verify age 17 years 364 days is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: (Execution date − 18 years) + 1 day ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith16@test.com
+Password: Pass@123","E58: ""Age must be 18 years or above""","High",""
+"New Customer","TC_NC_017 - DOB: minor (NC19)","Objective: Verify a clearly underage customer is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: Execution date − 10 years ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith17@test.com
+Password: Pass@123","E58 is displayed","High","NC19"
+"New Customer","TC_NC_018 - DOB: future date","Objective: Verify a future date is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: tomorrow's date ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith18@test.com
+Password: Pass@123","The date is rejected with E57 or E58","Medium",""
+"New Customer","TC_NC_019 - DOB: invalid date","Objective: Verify invalid dates are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page and repeat for each remaining attempt","Customer Name: John Smith
+Gender: Male
+Date of Birth:
+   [Attempt 1] 31/02/2000
+   [Attempt 2] abc ◄
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith19@test.com
+Password: Pass@123","E57: ""Invalid date format"" for each attempt","Medium",""
+"New Customer","TC_NC_020 - Address: blank (NC5)","Objective: Verify blank address is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Address empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: (empty) ◄
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith20@test.com
+Password: Pass@123","E5: ""Address Field must not be blank""","High","NC5"
+"New Customer","TC_NC_021 - Address: alphanumeric","Objective: Verify letters and numbers are accepted
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street Apt 5 ◄
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith21@test.com
+Password: Pass@123","Customer is created successfully","Medium",""
+"New Customer","TC_NC_022 - Address: special characters","Objective: Verify the alphanumeric rule
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: @#$%^& ◄
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith22@test.com
+Password: Pass@123","Address is rejected with an error","Medium",""
+"New Customer","TC_NC_023 - Address: max length 200 (BVA)","Objective: Verify the 200-character limit
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page, enter the values of Attempt 2, click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address:
+   [Attempt 1] Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main (200 characters)
+   [Attempt 2] Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main A (201 characters) ◄
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] john.smith23a@test.com
+   [Attempt 2] john.smith23b@test.com
+Password: Pass@123","200 characters are accepted; the 201st is rejected or truncated","Low",""
+"New Customer","TC_NC_024 - City: blank (NC6)","Objective: Verify blank city is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave City empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: (empty) ◄
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith24@test.com
+Password: Pass@123","E6: ""City Field must not be blank""","High","NC6"
+"New Customer","TC_NC_025 - City: numbers (NC7)","Objective: Verify numbers are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Cairo123 ◄
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith25@test.com
+Password: Pass@123","E48: ""Numbers are not allowed""","High","NC7"
+"New Customer","TC_NC_026 - City: special characters","Objective: Verify the ""alphabets only"" rule
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Cairo@# ◄
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith26@test.com
+Password: Pass@123","City is rejected with an error","Medium",""
+"New Customer","TC_NC_027 - State: blank (NC8)","Objective: Verify blank state is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave State empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: (empty) ◄
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith27@test.com
+Password: Pass@123","E7: ""State Field must not be blank""","High","NC8"
+"New Customer","TC_NC_028 - State: numbers (NC9)","Objective: Verify numbers are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Giza12 ◄
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith28@test.com
+Password: Pass@123","E48: ""Numbers are not allowed""","High","NC9"
+"New Customer","TC_NC_029 - City and State: max length 50 (BVA)","Objective: Verify the 50-character limit
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page, enter the values of Attempt 2, click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City:
+   [Attempt 1] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghij (50 letters)
+   [Attempt 2] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghijk (51 letters) ◄
+State:
+   [Attempt 1] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghij (50 letters)
+   [Attempt 2] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghijk (51 letters) ◄
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] john.smith29a@test.com
+   [Attempt 2] john.smith29b@test.com
+Password: Pass@123","50 characters are accepted; the 51st is rejected or truncated","Low",""
+"New Customer","TC_NC_030 - PIN: blank (NC10)","Objective: Verify blank PIN is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave PIN Code empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: (empty) ◄
+Mobile Number: 5551234567
+Email: john.smith30@test.com
+Password: Pass@123","E8: ""PIN Code must not be blank""","High","NC10"
+"New Customer","TC_NC_031 - PIN: non-numeric (NC11)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page and repeat for each remaining attempt","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code:
+   [Attempt 1] 12AB56
+   [Attempt 2] 12@#56 ◄
+Mobile Number: 5551234567
+Email: john.smith31@test.com
+Password: Pass@123","E9: ""PIN Code must be numeric"" for each attempt","High","NC11"
+"New Customer","TC_NC_032 - PIN: 5 digits (NC12, BVA)","Objective: Verify a short PIN is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 12345 ◄
+Mobile Number: 5551234567
+Email: john.smith32@test.com
+Password: Pass@123","E10: ""PIN Code must have 6 digits""","High","NC12"
+"New Customer","TC_NC_033 - PIN: 7 digits (BVA)","Objective: Verify the maximum length of 6
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 1234567 ◄
+Mobile Number: 5551234567
+Email: john.smith33@test.com
+Password: Pass@123","The 7th digit is not accepted, or E10 is displayed","Medium",""
+"New Customer","TC_NC_034 - Mobile: blank (NC13)","Objective: Verify blank mobile is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Mobile Number empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: (empty) ◄
+Email: john.smith34@test.com
+Password: Pass@123","E11: ""Mobile Number must not be blank""","High","NC13, E59"
+"New Customer","TC_NC_035 - Mobile: non-numeric (NC14)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page and repeat for each remaining attempt","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number:
+   [Attempt 1] 55512ABC90
+   [Attempt 2] 555123@#90 ◄
+Email: john.smith35@test.com
+Password: Pass@123","E12: ""Mobile Number must be numeric"" for each attempt","High","NC14, E59"
+"New Customer","TC_NC_036 - Mobile: 9 digits (BVA)","Objective: Verify the ""exactly 10 digits"" rule
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 555123456 ◄
+Email: john.smith36@test.com
+Password: Pass@123","Mobile is rejected with an error (no error code defined in SRS)","High","E59"
+"New Customer","TC_NC_037 - Mobile: 11 digits (BVA)","Objective: Verify the maximum length of 10
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 55512345678 ◄
+Email: john.smith37@test.com
+Password: Pass@123","The 11th digit is not accepted, or an error is displayed","Medium","E59"
+"New Customer","TC_NC_038 - Email: blank (NC15)","Objective: Verify blank email is rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Email empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: (empty) ◄
+Password: Pass@123","E13: ""E-mail field must not be blank""","High","NC15"
+"New Customer","TC_NC_039 - Email: invalid format (NC16)","Objective: Verify invalid formats are rejected
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page and repeat for each remaining attempt","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] john.smith
+   [Attempt 2] john@
+   [Attempt 3] @test.com
+   [Attempt 4] john@test
+   [Attempt 5] john smith@test.com ◄
+Password: Pass@123","E14: ""E-mail ID is not valid"" for each attempt","High","NC16"
+"New Customer","TC_NC_040 - Email: duplicate (NC17)","Objective: Verify a registered email is rejected
+1. Logged in as Manager
+2. New Customer page is open
+3. A customer with email john.smith01@test.com already exists (created in TC_NC_001)","1. Enter the values from Test data (same email as TC_NC_001)
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith01@test.com ◄
+Password: Pass@123","E49: ""Customer with this email already exists""; no customer created","High","NC17"
+"New Customer","TC_NC_041 - Email: duplicate with different case","Objective: Verify email uniqueness is case-insensitive
+1. Logged in as Manager
+2. New Customer page is open
+3. A customer with email john.smith01@test.com already exists (created in TC_NC_001)","1. Enter the values from Test data (same email as TC_NC_001 in uppercase)
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: JOHN.SMITH01@TEST.COM ◄
+Password: Pass@123","E49 is displayed","Medium",""
+"New Customer","TC_NC_042 - Email: max length 50 (BVA)","Objective: Verify the 50-character limit
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page, enter the values of Attempt 2, click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@test.com (50 characters)
+   [Attempt 2] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@test.com (51 characters) ◄
+Password: Pass@123","50 characters are accepted; the 51st is rejected or truncated","Low",""
+"New Customer","TC_NC_043 - Password: blank","Objective: Verify the Password is mandatory
+1. Logged in as Manager
+2. New Customer page is open","1. Leave Password empty and enter the rest from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith43@test.com
+Password: (empty) ◄","An error is displayed and no customer is created","High","3.1.2"
+"New Customer","TC_NC_044 - Password: 5 characters (BVA)","Objective: Verify the 6-character minimum
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith44@test.com
+Password: Ab@12 ◄","Password is rejected with an error","High","3.1.2"
+"New Customer","TC_NC_045 - Password: 6 characters (BVA)","Objective: Verify the minimum length is accepted
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith45@test.com
+Password: Ab@123 ◄","Customer is created successfully","High","3.1.2"
+"New Customer","TC_NC_046 - Password: max length 30 (BVA)","Objective: Verify the 30-character limit
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values of Attempt 1 from Test data, click Submit
+2. Reopen the New Customer page, enter the values of Attempt 2, click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email:
+   [Attempt 1] john.smith46a@test.com
+   [Attempt 2] john.smith46b@test.com
+Password:
+   [Attempt 1] Ab@123xxxxxxxxxxxxxxxxxxxxxxxx (30 characters)
+   [Attempt 2] Ab@123xxxxxxxxxxxxxxxxxxxxxxxxx (31 characters) ◄","30 characters are accepted; the 31st is rejected or truncated","Low","3.1.2"
+"New Customer","TC_NC_047 - Password: masked display","Objective: Verify the Password input is masked
+1. Logged in as Manager
+2. New Customer page is open","1. Type the Password from Test data in the Password field","Password: Pass@123 ◄","Characters appear as dots/asterisks","High","3.1.2"
+"New Customer","TC_NC_048 - All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager
+2. New Customer page is open","1. Leave all fields empty
+2. Click Submit","Customer Name: (empty) ◄
+Gender: (none selected) ◄
+Date of Birth: (empty) ◄
+Address: (empty) ◄
+City: (empty) ◄
+State: (empty) ◄
+PIN Code: (empty) ◄
+Mobile Number: (empty) ◄
+Email: (empty) ◄
+Password: (empty) ◄","Required-field errors are displayed (E4, E5, E6, E7, E8, E11, E13, E50 plus Gender and Password); no customer is created","High","General"
+"New Customer","TC_NC_049 - Multiple invalid fields","Objective: Verify several errors at once
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John1 ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123 ◄
+Mobile Number: 5551234567
+Email: abc ◄
+Password: Pass@123","E48, E10 and E14 are displayed; no customer is created","Medium","General"
+"New Customer","TC_NC_050 - XSS input","Objective: Verify script input is not executed
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: <script>alert('x')</script> ◄
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith50@test.com
+Password: Pass@123","Input is rejected (E46) and no script is executed","High","General"
+"New Customer","TC_NC_051 - SQL injection input","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Click Submit","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: ' OR '1'='1 ◄
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith51@test.com
+Password: Pass@123","Input is rejected or stored safely; no database error is displayed","Medium","General"
+"New Customer","TC_NC_052 - Double submission","Objective: Verify no duplicate customer is created
+1. Logged in as Manager
+2. New Customer page is open","1. Enter the values from Test data
+2. Double-click Submit quickly","Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith52@test.com
+Password: Pass@123","Only one customer is created; the duplicate attempt is ignored or rejected (E49)","Medium","General"
+"Edit Customer","TC_EC_001 - Retrieve customer with valid ID","Objective: Verify customer details are displayed for a valid Customer ID
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001 and not yet edited)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data
+2. Click Submit","Customer ID: 4073
+
+Values entered in TC_NC_001:
+Customer Name: John Smith
+Gender: Male
+Date of Birth: 1990-05-15
+Address: 12 Main Street
+City: Alexandria
+State: Alexandria
+PIN Code: 123456
+Mobile Number: 5551234567
+Email: john.smith01@test.com","Customer details are displayed in an editable form and match the values entered at creation","High","3.1.3"
+"Edit Customer","TC_EC_002 - Non-editable fields are disabled","Objective: Verify Customer ID, Customer Name, Gender and Date of Birth cannot be edited
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Load customer 4073
+2. Try to type in / change Customer ID, Customer Name, Gender and Date of Birth","Customer ID: 4073","Customer ID, Customer Name, Gender and Date of Birth are disabled and cannot be changed","High","3.1.3"
+"Edit Customer","TC_EC_003 - Editable fields are enabled","Objective: Verify Address, City, State, PIN, Mobile and Email can be edited
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Load customer 4073
+2. Click into each of the six fields and type","Customer ID: 4073","Address, City, State, PIN Code, Mobile Number and Email accept input","High","3.1.3"
+"Edit Customer","TC_EC_004 - Customer ID: blank (EC1)","Objective: Verify blank Customer ID is rejected
+1. Logged in as Manager
+2. Edit Customer page is open","1. Leave Customer ID empty
+2. Click Submit","Customer ID: (empty) ◄","E15: ""Customer ID must not be blank""","High","EC1"
+"Edit Customer","TC_EC_005 - Customer ID: non-numeric (EC2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Edit Customer page is open","1. Enter the Attempt 1 value, click Submit
+2. Repeat for the Attempt 2 value","Customer ID:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E16: ""Customer ID must be numeric"" for each attempt","High","EC2"
+"Edit Customer","TC_EC_006 - Customer ID: unusual numeric values","Objective: Verify zero, negative and decimal values are handled
+1. Logged in as Manager
+2. Edit Customer page is open","1. Enter the Attempt 1 value, click Submit
+2. Repeat for each remaining attempt","Customer ID:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E16 or the ""Customer ID does not exist"" error; no customer is loaded","Low",""
+"Edit Customer","TC_EC_007 - Customer ID: does not exist (EC3)","Objective: Verify an unknown Customer ID is rejected
+1. Logged in as Manager
+2. Edit Customer page is open","1. Enter a non-existent ID
+2. Click Submit","Customer ID: 999999999 ◄","E51: ""Customer ID does not exist""","High","EC3"
+"Edit Customer","TC_EC_008 - Customer of another Manager (EC4)","Objective: Verify a Manager cannot edit a customer associated with another Manager
+1. A second Manager account exists
+2. Customer 4073 is associated with Manager 1 only
+3. Logged in as Manager 2","1. Log in as Manager 2
+2. Open Edit Customer
+3. Enter the Customer ID of customer 4073, click Submit","Customer ID: 4073 ◄
+Logged in as: Manager 2 (a different Manager)","E44 is displayed; the customer details are not loaded","High","EC4"
+"Edit Customer","TC_EC_009 - Customer ID: SQL injection","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Edit Customer page is open","1. Enter the value from Test data
+2. Click Submit","Customer ID: 1 OR 1=1 ◄","Input is rejected (E16); no customer data is returned and no database error is displayed","Medium",""
+"Edit Customer","TC_EC_010 - Update all editable fields with valid data","Objective: Verify all six editable fields can be updated together
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: 45 Park Avenue ◄
+City: Cairo ◄
+State: Cairo ◄
+PIN Code: 654321 ◄
+Mobile Number: 5559876543 ◄
+Email: john.edit10@test.com ◄","Customer is updated successfully and a confirmation is displayed (message not defined in SRS)","High","3.1.3"
+"Edit Customer","TC_EC_011 - Updated data is persisted","Objective: Verify the update is saved by reloading the customer
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (updated in TC_EC_010)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit
+2. Compare the loaded values with the Test data","Customer ID: 4073
+
+Expected values (from TC_EC_010):
+Address: 45 Park Avenue
+City: Cairo
+State: Cairo
+PIN Code: 654321
+Mobile Number: 5559876543
+Email: john.edit10@test.com
+Customer Name, Gender and Date of Birth: unchanged (see TC_NC_001)","All six fields show the updated values; Name, Gender and DOB are unchanged","High","3.1.3"
+"Edit Customer","TC_EC_012 - Update a single field only","Objective: Verify updating one field leaves the others unchanged
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: 78 River Road ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","Address is updated; City, State, PIN, Mobile and Email keep their previous values","Medium","3.1.3"
+"Edit Customer","TC_EC_013 - Submit without any change","Objective: Verify submitting an unchanged form is handled gracefully
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Load customer 4073
+2. Click Submit without changing anything","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","No error occurs and the data remains unchanged (behavior not defined in SRS)","Low","3.1.3"
+"Edit Customer","TC_EC_014 - Address: blank","Objective: Verify blank address is rejected (EC6, NC5)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (empty) ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E5: ""Address Field must not be blank""","High","EC6"
+"Edit Customer","TC_EC_015 - Address: special characters","Objective: Verify the alphanumeric rule (EC6)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: @#$%^& ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","Address is rejected with an error","Medium","EC6"
+"Edit Customer","TC_EC_016 - Address: max length 200 (BVA)","Objective: Verify the 200-character limit
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value(s), click Submit
+2. Load customer 4073 again and repeat with the Attempt 2 value(s)","Customer ID: 4073
+Address:
+   [Attempt 1] Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main (200 characters)
+   [Attempt 2] Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main Street 12 Main A (201 characters) ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","200 characters are accepted; the 201st is rejected or truncated","Low",""
+"Edit Customer","TC_EC_017 - City: blank","Objective: Verify blank city is rejected (EC6, NC6)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (empty) ◄
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E6: ""City Field must not be blank""","High","EC6"
+"Edit Customer","TC_EC_018 - City: numbers","Objective: Verify numbers are rejected (EC6, NC7)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: Cairo123 ◄
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E48: ""Numbers are not allowed""","High","EC6"
+"Edit Customer","TC_EC_019 - City: special characters","Objective: Verify the ""alphabets only"" rule (EC6)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: Cairo@# ◄
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","City is rejected with an error (no error code defined in SRS)","Medium","EC6"
+"Edit Customer","TC_EC_020 - State: blank","Objective: Verify blank state is rejected (EC6, NC8)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (empty) ◄
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E7: ""State Field must not be blank""","High","EC6"
+"Edit Customer","TC_EC_021 - State: numbers","Objective: Verify numbers are rejected (EC6, NC9)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: Giza12 ◄
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E48: ""Numbers are not allowed""","High","EC6"
+"Edit Customer","TC_EC_022 - City and State: max length 50 (BVA)","Objective: Verify the 50-character limit
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value(s), click Submit
+2. Load customer 4073 again and repeat with the Attempt 2 value(s)","Customer ID: 4073
+Address: (leave as loaded)
+City:
+   [Attempt 1] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghij (50 letters)
+   [Attempt 2] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghijk (51 letters) ◄
+State:
+   [Attempt 1] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghij (50 letters)
+   [Attempt 2] AbcdefghijAbcdefghijAbcdefghijAbcdefghijAbcdefghijk (51 letters) ◄
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","50 characters are accepted; the 51st is rejected or truncated","Low",""
+"Edit Customer","TC_EC_023 - PIN: blank","Objective: Verify blank PIN is rejected (EC6, NC10)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (empty) ◄
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E8: ""PIN Code must not be blank""","High","EC6"
+"Edit Customer","TC_EC_024 - PIN: non-numeric","Objective: Verify letters and symbols are rejected (EC6, NC11)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value, click Submit
+2. Load customer 4073 again and repeat for each remaining attempt","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code:
+   [Attempt 1] 12AB56
+   [Attempt 2] 12@#56 ◄
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E9: ""PIN Code must be numeric"" for each attempt","High","EC6"
+"Edit Customer","TC_EC_025 - PIN: 5 digits (BVA)","Objective: Verify a short PIN is rejected (EC6, NC12)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: 12345 ◄
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","E10: ""PIN Code must have 6 digits""","High","EC6"
+"Edit Customer","TC_EC_026 - PIN: 7 digits (BVA)","Objective: Verify the maximum length of 6
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: 1234567 ◄
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","The 7th digit is not accepted, or E10 is displayed","Medium",""
+"Edit Customer","TC_EC_027 - Mobile: blank","Objective: Verify blank mobile is rejected (EC6, NC13)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (empty) ◄
+Email: (leave as loaded)","E11: ""Mobile Number must not be blank""","High","EC6"
+"Edit Customer","TC_EC_028 - Mobile: non-numeric","Objective: Verify letters and symbols are rejected (EC6, NC14)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value, click Submit
+2. Load customer 4073 again and repeat for each remaining attempt","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number:
+   [Attempt 1] 55512ABC90
+   [Attempt 2] 555123@#90 ◄
+Email: (leave as loaded)","E12: ""Mobile Number must be numeric"" for each attempt","High","EC6"
+"Edit Customer","TC_EC_029 - Mobile: 9 digits (BVA)","Objective: Verify the ""exactly 10 digits"" rule
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: 555123456 ◄
+Email: (leave as loaded)","E59: ""Mobile number must be 10 digits""","High",""
+"Edit Customer","TC_EC_030 - Mobile: 11 digits (BVA)","Objective: Verify the maximum length of 10
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: 55512345678 ◄
+Email: (leave as loaded)","The 11th digit is not accepted, or E59 is displayed","Medium",""
+"Edit Customer","TC_EC_031 - Email: blank","Objective: Verify blank email is rejected (EC6, NC15)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (empty) ◄","E13: ""E-mail field must not be blank""","High","EC6"
+"Edit Customer","TC_EC_032 - Email: invalid format","Objective: Verify invalid formats are rejected (EC6, NC16)
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value, click Submit
+2. Load customer 4073 again and repeat for each remaining attempt","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email:
+   [Attempt 1] john.smith
+   [Attempt 2] john@
+   [Attempt 3] @test.com
+   [Attempt 4] john@test
+   [Attempt 5] john smith@test.com ◄","E14: ""E-mail ID is not valid"" for each attempt","High","EC6"
+"Edit Customer","TC_EC_033 - Email: change to a new unique email (EC5)","Objective: Verify a unique new email is accepted
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: john.edit33@test.com ◄","Email is updated successfully","High","EC5"
+"Edit Customer","TC_EC_034 - Email: change to an existing email (EC5)","Objective: Verify an email used by another customer is rejected
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open
+4. Another customer is registered with the email a1a@gmail.com","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: a1a@gmail.com (email of another customer) ◄","E49: ""Customer with this email already exists""; the customer's email is not changed","High","EC5"
+"Edit Customer","TC_EC_035 - Email: existing email with different case (EC5)","Objective: Verify email uniqueness is case-insensitive
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open
+4. Customer 78692 (customer B created in TC_NC_004) exists with the email john.smith04b@test.com","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: JOHN.SMITH04B@TEST.COM ◄","E49 is displayed","Medium","EC5"
+"Edit Customer","TC_EC_036 - Email: keep own email while editing another field (EC5)","Objective: Verify E49 is not raised when the email is unchanged
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: 78 River Road ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded: the current email of customer 4073) ◄","Update succeeds; E49 is not displayed because the email was not changed","High","EC5"
+"Edit Customer","TC_EC_037 - Email: max length 50 (BVA)","Objective: Verify the 50-character limit
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID, click Submit, enter the Attempt 1 value(s), click Submit
+2. Load customer 4073 again and repeat with the Attempt 2 value(s)","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email:
+   [Attempt 1] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@test.com (50 characters)
+   [Attempt 2] aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@test.com (51 characters) ◄","50 characters are accepted; the 51st is rejected or truncated","Low",""
+"Edit Customer","TC_EC_038 - Multiple invalid fields","Objective: Verify several errors at once
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: (leave as loaded)
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: 123 ◄
+Mobile Number: abc ◄
+Email: xyz ◄","E10, E12 and E14 are displayed; no data is changed","Medium",""
+"Edit Customer","TC_EC_039 - Failed update does not change stored data","Objective: Verify a rejected update leaves the customer unchanged
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Load customer 4073, enter an invalid PIN, click Submit (error expected)
+2. Reload customer 4073 and review the values","Customer ID: 4073
+PIN Code: 123 ◄ (invalid)
+All other fields: (leave as loaded)","E10 is displayed on submit; after reloading, all fields still hold their previous values","High",""
+"Edit Customer","TC_EC_040 - XSS input","Objective: Verify script input is not executed
+1. Logged in as Manager
+2. Customer 4073 exists and is associated with this Manager (created in TC_NC_001)
+3. Edit Customer page is open","1. Enter the Customer ID from Test data and click Submit
+2. Change the field(s) marked ◄ to the values in Test data
+3. Click Submit","Customer ID: 4073
+Address: <script>alert('x')</script> ◄
+City: (leave as loaded)
+State: (leave as loaded)
+PIN Code: (leave as loaded)
+Mobile Number: (leave as loaded)
+Email: (leave as loaded)","Input is rejected and no script is executed","High","General"
+"Delete Customer","TC_DC_001 - Delete customer without accounts","Objective: Verify a customer with no accounts can be deleted after confirmation
+1. Logged in as Manager
+2. Customer 4073 exists, has no accounts and is associated with this Manager
+3. Delete Customer page is open","1. Enter the Customer ID from Test data
+2. Click Delete
+3. Confirm in the dialog","Customer ID: 4073 ◄","A confirmation dialog appears; after confirming, the customer is deleted and a success message is displayed (message not defined in SRS)","High","3.1.4"
+"Delete Customer","TC_DC_002 - Confirmation dialog before deletion","Objective: Verify deletion is not executed until the Manager confirms
+1. Logged in as Manager
+2. Customer 4073 exists with no accounts
+3. Delete Customer page is open","1. Enter the Customer ID
+2. Click Delete
+3. Observe the dialog without confirming","Customer ID: 4073 ◄","A confirmation dialog is displayed after clicking Delete; the customer still exists until the dialog is confirmed","High","3.1.4"
+"Delete Customer","TC_DC_003 - Cancel the confirmation dialog","Objective: Verify cancelling keeps the customer
+1. Logged in as Manager
+2. Customer 4073 exists with no accounts
+3. Delete Customer page is open","1. Enter the Customer ID
+2. Click Delete
+3. Click Cancel in the dialog
+4. Open Edit Customer and load the same ID","Customer ID: 4073 ◄","The customer is not deleted; loading the ID in Edit Customer still shows the customer details","High","3.1.4"
+"Delete Customer","TC_DC_004 - Deleted customer cannot be retrieved","Objective: Verify the deleted customer no longer exists
+1. Logged in as Manager
+2. Customer 4073 was deleted in TC_DC_001","1. Open Edit Customer
+2. Enter the deleted Customer ID
+3. Click Submit","Customer ID: 4073 (deleted in TC_DC_001) ◄","E51: ""Customer ID does not exist""","High","3.1.4"
+"Delete Customer","TC_DC_005 - Delete an already deleted customer","Objective: Verify deleting the same ID twice is handled (DC3)
+1. Logged in as Manager
+2. Customer 4073 was deleted in TC_DC_001
+3. Delete Customer page is open","1. Enter the Customer ID from Test data
+2. Click Delete","Customer ID: 4073 (already deleted) ◄","E51: ""Customer ID does not exist""","Medium","DC3, 3.1.4"
+"Delete Customer","TC_DC_006 - Customer ID: blank (DC1)","Objective: Verify blank Customer ID is rejected
+1. Logged in as Manager
+2. Delete Customer page is open","1. Enter the Customer ID from Test data
+2. Click Delete","Customer ID: (empty) ◄","E15: ""Customer ID must not be blank""","High","DC1"
+"Delete Customer","TC_DC_007 - Customer ID: non-numeric (DC2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Delete Customer page is open","1. Enter the Attempt 1 value (other fields valid), click Delete
+2. Repeat for each remaining attempt","Customer ID:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E16: ""Customer ID must be numeric"" for each attempt","High","DC2"
+"Delete Customer","TC_DC_008 - Customer ID: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Delete Customer page is open","1. Enter the Attempt 1 value (other fields valid), click Delete
+2. Repeat for each remaining attempt","Customer ID:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E16 or E51; nothing is deleted","Low",""
+"Delete Customer","TC_DC_009 - Customer ID: does not exist (DC3)","Objective: Verify an unknown ID is rejected
+1. Logged in as Manager
+2. Delete Customer page is open","1. Enter the Customer ID from Test data
+2. Click Delete","Customer ID: 999999999 ◄","E51: ""Customer ID does not exist""","High","DC3"
+"Delete Customer","TC_DC_010 - Customer with active accounts (DC4)","Objective: Verify a customer with accounts cannot be deleted
+1. Logged in as Manager
+2. Customer 38892 has active accounts 185657 and 185658
+3. Delete Customer page is open","1. Enter the Customer ID
+2. Click Delete
+3. Confirm in the dialog (if shown)","Customer ID: 38892 ◄ (owner of accounts 185657 and 185658)","E52: ""Customer has active accounts and cannot be deleted""; the customer and accounts remain","High","DC4"
+"Delete Customer","TC_DC_011 - Customer of another Manager (DC5)","Objective: Verify a Manager cannot delete another Manager's customer
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Delete Customer page is open","1. Enter the Customer ID from Test data
+2. Click Delete","Customer ID: a Manager 2 customer (ID not recorded) ◄
+Logged in as: Manager 1","E44 is displayed; the customer is not deleted","High","DC5"
+"Delete Customer","TC_DC_012 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Delete Customer page is open","1. Type the Customer ID
+2. Click Reset","Customer ID: 12345 (typed, then Reset)","The Customer ID field is cleared and no error is displayed","Low","3.1.4"
+"Delete Customer","TC_DC_013 - Deleted customer's email can be reused","Objective: Verify the email of a deleted customer is released
+1. Logged in as Manager
+2. Customer 4073 was deleted in TC_DC_001","1. Open New Customer
+2. Fill the form with the email of the deleted customer and valid data
+3. Click Submit","Email: the email of the deleted customer 4073","A new customer with the same email is created without E49","Medium","3.1.4"
+"Delete Customer","TC_DC_014 - Browser refresh after deletion","Objective: Verify refreshing after a deletion does not crash
+1. Logged in as Manager
+2. Delete Customer page is open","1. After a successful deletion press F5 and confirm the resubmission prompt (if any)","Customer ID: 4073 (deleted in TC_DC_001)","No server error is shown; the page shows E51 or reloads the empty form","Low","3.1.4"
+"New Account","TC_NA_001 - Create Savings account with valid data","Objective: Verify a Savings account is created (account 185657)
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 1000","A unique Account Number is generated and a confirmation is displayed with the account details","High","3.1.5"
+"New Account","TC_NA_002 - Create Current account with valid data","Objective: Verify a Current account is created (account 185658)
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Current ◄
+Initial Deposit: 5000 ◄","A unique Account Number is generated and a confirmation is displayed","High","3.1.5"
+"New Account","TC_NA_003 - Form fields and buttons","Objective: Verify fields in SRS 3.1.5 exist
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Open the New Account page
+2. Review the form and open the Account Type dropdown","","Customer ID, Account Type (dropdown with only Savings and Current), Initial Deposit, Submit and Reset are present","Medium","3.1.5"
+"New Account","TC_NA_004 - Unique account numbers","Objective: Verify every account gets a different number
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Compare the Account Numbers generated in TC_NA_001 and TC_NA_002","Account 185657 (created in TC_NA_001) and account 185658 (created in TC_NA_002)","The Account Numbers generated for 185657 and 185658 are different","High","3.1.5"
+"New Account","TC_NA_005 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Reset","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 1000","All fields are cleared and the dropdown returns to its default; no error is displayed","Medium","3.1.5"
+"New Account","TC_NA_006 - Several accounts for one customer","Objective: Verify one customer can own more than one account of the same type
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 1500 ◄","A second Savings account is created for customer 38892 with a new Account Number","Medium","3.1.5"
+"New Account","TC_NA_007 - Opening balance equals initial deposit","Objective: Verify the new account balance
+1. Logged in as Manager
+2. Account 185657 was created in TC_NA_001 and no other transaction was made on it","1. Open Balance Enquiry
+2. Enter the Account Number of 185657
+3. Click Submit","Account Number: 185657
+Expected balance: 1000.00","Balance Enquiry for 185657 shows a balance equal to the Initial Deposit","High","3.1.5"
+"New Account","TC_NA_008 - Customer ID: blank (NA1)","Objective: Verify blank Customer ID is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: (empty) ◄
+Account Type: Savings
+Initial Deposit: 1000","E15: ""Customer ID must not be blank""","High","NA1"
+"New Account","TC_NA_009 - Customer ID: non-numeric (NA2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Customer ID:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+Account Type: Savings
+Initial Deposit: 1000","E16: ""Customer ID must be numeric"" for each attempt","High","NA2"
+"New Account","TC_NA_010 - Customer ID: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Customer ID:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄
+Account Type: Savings
+Initial Deposit: 1000","Each value is rejected with E16 or E51; no account is created","Low",""
+"New Account","TC_NA_011 - Customer ID: does not exist (NA3)","Objective: Verify an unknown Customer ID is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 999999999 ◄
+Account Type: Savings
+Initial Deposit: 1000","E51: ""Customer ID does not exist""","High","NA3"
+"New Account","TC_NA_012 - Customer of another Manager (NA4)","Objective: Verify a Manager cannot open an account for another Manager's customer
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: a Manager 2 customer (ID not recorded) ◄
+Account Type: Savings
+Initial Deposit: 1000","E44 is displayed; no account is created","High","NA4"
+"New Account","TC_NA_013 - Customer ID: max length 10 (BVA)","Objective: Verify the 10-character limit
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 12345678901 (11 digits) ◄
+Account Type: Savings
+Initial Deposit: 1000","Only 10 digits are accepted in the field (the 11th is not typed or is rejected)","Low",""
+"New Account","TC_NA_014 - Account Type: not selected (NA5)","Objective: Verify Account Type is mandatory
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: (not selected) ◄
+Initial Deposit: 1000","E17: ""Account Type must not be blank""","High","NA5"
+"New Account","TC_NA_015 - Initial Deposit: blank (NA6)","Objective: Verify blank deposit is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: (empty) ◄","E18: ""Initial Deposit must not be blank""","High","NA6"
+"New Account","TC_NA_016 - Initial Deposit: non-numeric (NA7)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Customer ID: 38892
+Account Type: Savings
+Initial Deposit:
+   [Attempt 1] abc
+   [Attempt 2] 10@0
+   [Attempt 3] 5 00 ◄","E19: ""Initial Deposit must be numeric"" for each attempt","High","NA7"
+"New Account","TC_NA_017 - Initial Deposit: 499 (BVA)","Objective: Verify the value just below the minimum is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 499 ◄","E20 is displayed; no account is created","High",""
+"New Account","TC_NA_018 - Initial Deposit: 500 (BVA)","Objective: Verify the minimum value is accepted (NA8: >= 500)
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 500 ◄","Account is created (NA8 says >= 500, but E20 text says ""greater than 500""; document the actual behavior)","High","NA8"
+"New Account","TC_NA_019 - Initial Deposit: 501 (BVA)","Objective: Verify a value just above the minimum is accepted
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 501 ◄","Account is created with balance 501.00","Medium",""
+"New Account","TC_NA_020 - Initial Deposit: zero","Objective: Verify zero is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 0 ◄","E20 is displayed; no account is created","Medium",""
+"New Account","TC_NA_021 - Initial Deposit: negative","Objective: Verify a negative amount is rejected
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: -500 ◄","The value is rejected with E19 or E20; no account is created","High",""
+"New Account","TC_NA_022 - Initial Deposit: decimal","Objective: Verify a decimal amount is handled
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 500.50 ◄","Account is created with balance 500.50, or a clear error is shown (SRS does not define decimals)","Medium",""
+"New Account","TC_NA_023 - Initial Deposit: three decimals","Objective: Verify precision handling
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 500.555 ◄","The value is rejected, or rounded consistently to 2 decimals (DB uses DECIMAL(15,2))","Low",""
+"New Account","TC_NA_024 - Initial Deposit: leading zeros","Objective: Verify leading zeros are handled
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 0500 ◄","Value is read as 500 and handled like TC_NA_018","Low",""
+"New Account","TC_NA_025 - Initial Deposit: very large amount","Objective: Verify overflow is handled gracefully
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 99999999999999999999 (20 digits) ◄","A clear error is displayed; no crash, no stack trace and no account with a wrong balance (DB limit is 13 integer digits)","Medium",""
+"New Account","TC_NA_026 - All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Leave all fields empty
+2. Click Submit","Customer ID: (empty) ◄
+Account Type: (not selected) ◄
+Initial Deposit: (empty) ◄","E15, E17 and E18 are displayed; no account is created","High","General"
+"New Account","TC_NA_027 - Multiple invalid fields","Objective: Verify several errors at once
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: ABC ◄
+Account Type: (not selected) ◄
+Initial Deposit: 100 ◄","E16, E17 and E20 are displayed; no account is created","Medium","General"
+"New Account","TC_NA_028 - SQL injection in Initial Deposit","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Click Submit","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 500' OR '1'='1 ◄","E19 is displayed; no database error is shown","Medium","General"
+"New Account","TC_NA_029 - Double submission","Objective: Verify no duplicate account is created
+1. Logged in as Manager
+2. Customer 38892 exists and is associated with this Manager
+3. New Account page is open","1. Enter the values from Test data
+2. Double-click Submit quickly","Customer ID: 38892
+Account Type: Savings
+Initial Deposit: 1000","Only one account is created for the double-click","Medium","General"
+"Edit Account","TC_EA_001 - Retrieve account with valid number","Objective: Verify account details are displayed
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number
+2. Click Submit","Account Number: 185657 ◄","Account details are displayed in a form (Account Number, Customer ID, Account Type, Balance)","High","3.1.6"
+"Edit Account","TC_EA_002 - Non-editable fields are disabled","Objective: Verify Account Number, Customer ID and Balance cannot be edited
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Load 185657
+2. Try to type in each of the three fields","Account Number: 185657","Account Number, Customer ID and Balance are disabled and cannot be changed","High","3.1.6"
+"Edit Account","TC_EA_003 - Account Type dropdown options","Objective: Verify only Savings and Current are offered
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Load 185657
+2. Open the Account Type dropdown","Account Number: 185657","The dropdown offers Savings and Current only; Account Type is editable","Medium","3.1.6"
+"Edit Account","TC_EA_004 - Change Savings to Current","Objective: Verify the account type can be changed and is saved
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number from Test data and click Submit
+2. Change Account Type as shown in Test data
+3. Click Submit
+4. Reload 185657 and check Account Type","Account Number: 185657
+Account Type: Current ◄","Account Type is updated and a confirmation is displayed; reloading 185657 shows Current","High",""
+"Edit Account","TC_EA_005 - Change Current to Savings","Objective: Verify the reverse change
+1. Logged in as Manager
+2. Account 185658 (Current) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number from Test data and click Submit
+2. Change Account Type as shown in Test data
+3. Click Submit","Account Number: 185658
+Account Type: Savings ◄","Account Type is updated; reloading 185658 shows Savings","Medium",""
+"Edit Account","TC_EA_006 - Submit without changes","Objective: Verify submitting an unchanged form is handled
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number from Test data and click Submit
+2. Change Account Type as shown in Test data
+3. Click Submit","Account Number: 185657
+Account Type: (leave as loaded)","No error occurs and the data remains unchanged (behavior not defined in SRS)","Low",""
+"Edit Account","TC_EA_007 - Balance unchanged after type change","Objective: Verify editing does not affect the balance
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Note the balance in Balance Enquiry
+2. Change Account Type (TC_EA_004)
+3. Check the balance again","Account Number: 185657
+Balance before and after: compare","Balance Enquiry shows the same balance before and after the change","High",""
+"Edit Account","TC_EA_008 - Account Type: not selected (EA5)","Objective: Verify Account Type cannot be blank
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number from Test data and click Submit
+2. Change Account Type as shown in Test data
+3. Click Submit","Account Number: 185657
+Account Type: (not selected) ◄","E17: ""Account Type must not be blank"" (applies only if the dropdown allows an empty option)","Medium","EA5"
+"Edit Account","TC_EA_009 - Account Number: blank (EA1)","Objective: Verify blank account number is rejected
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Leave Account Number empty
+2. Click Submit","Account Number: (empty) ◄","E21: ""Account Number must not be blank""","High","EA1"
+"Edit Account","TC_EA_010 - Account Number: non-numeric (EA2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E22: ""Account Number must be numeric"" (or E23 ""Characters are not allowed in Account Number""; SRS overlaps)","High","EA2"
+"Edit Account","TC_EA_011 - Account Number: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E22 or E24; no account is loaded","Low",""
+"Edit Account","TC_EA_012 - Account Number: does not exist (EA3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number
+2. Click Submit","Account Number: 999999999999999 ◄","E24: ""Account Number not found""","High","EA3"
+"Edit Account","TC_EA_013 - Account of another Manager (EA4)","Objective: Verify a Manager cannot edit another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Edit Account page is open","1. Enter the Account Number
+2. Click Submit","Account Number: an account of a Manager 2 customer (number not recorded) ◄","E44 is displayed; the account is not loaded","High","EA4"
+"Edit Account","TC_EA_014 - Account Number: max length 15 (BVA)","Objective: Verify the 15-character limit
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number
+2. Click Submit","Account Number: 1234567890123456 (16 digits) ◄","The 16th digit is not accepted, or E24 is displayed","Low",""
+"Edit Account","TC_EA_015 - SQL injection in Account Number","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Account 185657 (Savings) exists and is associated with this Manager
+3. Edit Account page is open","1. Enter the Account Number
+2. Click Submit","Account Number: 1 OR 1=1 ◄","E22 is displayed; no account data is returned and no database error is shown","Medium","General"
+"Delete Account","TC_DA_001 - Delete account with zero balance","Objective: Verify an account with zero balance can be deleted after confirmation
+1. Logged in as Manager
+2. An account with balance 0.00 exists and is associated with this Manager (not available, see Test Data Setup)
+3. Delete Account page is open","1. Enter the Account Number
+2. Click Delete
+3. Confirm in the dialog","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","A confirmation dialog appears; after confirming, the account is deleted and a success message is displayed (see SRS gap: accounts with transactions)","High","3.1.7"
+"Delete Account","TC_DA_002 - Confirmation dialog before deletion","Objective: Verify deletion is not executed until confirmed
+1. Logged in as Manager
+2. An account with balance 0.00 exists (not available, see Test Data Setup)","1. Enter the Account Number
+2. Click Delete
+3. Observe the dialog without confirming","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","A confirmation dialog is displayed; the account still exists until confirmed","High","3.1.7"
+"Delete Account","TC_DA_003 - Cancel the confirmation dialog","Objective: Verify cancelling keeps the account
+1. Logged in as Manager
+2. An account with balance 0.00 exists (not available, see Test Data Setup)","1. Enter the Account Number
+2. Click Delete
+3. Click Cancel
+4. Check the account in Balance Enquiry","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","The account is not deleted; Balance Enquiry still returns it","High","3.1.7"
+"Delete Account","TC_DA_004 - Deleted account cannot be retrieved","Objective: Verify the deleted account no longer exists
+1. Logged in as Manager
+2. The account was deleted in TC_DA_001","1. Open Balance Enquiry
+2. Enter the deleted Account Number
+3. Click Submit","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","E24: ""Account Number not found""","High","3.1.7"
+"Delete Account","TC_DA_005 - Delete an already deleted account","Objective: Verify deleting the same account twice is handled
+1. Logged in as Manager
+2. The account was deleted in TC_DA_001
+3. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","E24: ""Account Number not found""","Medium","3.1.7"
+"Delete Account","TC_DA_006 - Account Number: blank (DA1)","Objective: Verify blank account number is rejected
+1. Logged in as Manager
+2. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: (empty) ◄","E21: ""Account Number must not be blank""","High","DA1"
+"Delete Account","TC_DA_007 - Account Number: non-numeric (DA2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Delete Account page is open","1. Enter the Attempt 1 value (other fields valid), click Delete
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E22: ""Account Number must be numeric"" for each attempt","High","DA2"
+"Delete Account","TC_DA_008 - Account Number: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Delete Account page is open","1. Enter the Attempt 1 value (other fields valid), click Delete
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E22 or E24; nothing is deleted","Low",""
+"Delete Account","TC_DA_009 - Account Number: does not exist (DA3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: 999999999999999 ◄","E24: ""Account Number not found""","High","DA3"
+"Delete Account","TC_DA_010 - Account of another Manager (DA4)","Objective: Verify a Manager cannot delete another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: an account of a Manager 2 customer (number not recorded) ◄","E44 is displayed; the account is not deleted","High","DA4"
+"Delete Account","TC_DA_011 - Account with positive balance (DA5)","Objective: Verify an account with money cannot be deleted
+1. Logged in as Manager
+2. Account 185657 has a balance greater than 0
+3. Delete Account page is open","1. Enter the Account Number
+2. Click Delete
+3. Confirm (if shown)","Account Number: 185657 (balance 1000.00) ◄","E53: ""Account balance must be zero to delete""; the account remains","High","DA5"
+"Delete Account","TC_DA_012 - Account with balance 0.01 (BVA)","Objective: Verify the smallest positive balance blocks deletion
+1. Logged in as Manager
+2. An account with balance 0.01 exists (set up with deposits/withdrawals)
+3. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: an account with balance 0.01 (not available, see Test Data Setup) ◄","E53 is displayed; the account remains","Medium",""
+"Delete Account","TC_DA_013 - Zero balance but existing transactions","Objective: Verify the conflict between DA5 and RESTRICT DELETE (SRS 3.8.3)
+1. Logged in as Manager
+2. An account with transactions and balance 0.00 exists (not available, see Test Data Setup)
+3. Delete Account page is open","1. Enter the Account Number from Test data
+2. Click Delete","Account Number: an account with balance 0.00 (not available, see Test Data Setup) ◄","Document the actual behavior: DA5 allows deletion at zero balance, while 3.8.3 forbids deleting an account with transactions","High","DA5"
+"Deposit","TC_DP_001 - Deposit with valid data","Objective: Verify a deposit is processed
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 500
+Description: Salary deposit","Deposit succeeds; the updated balance (B + 500) and a Transaction ID are displayed","High","3.1.8"
+"Deposit","TC_DP_002 - Balance after deposit","Objective: Verify the balance in Balance Enquiry
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Complete TC_DP_001
+2. Open Balance Enquiry and enter 185657","Account Number: 185657
+Expected balance: B + 500","Balance Enquiry shows B + 500","High","3.1.8"
+"Deposit","TC_DP_003 - Deposit appears in Mini Statement","Objective: Verify the transaction is recorded
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Complete TC_DP_001
+2. Open Mini Statement and enter 185657","Account Number: 185657","The latest row shows the Transaction ID from TC_DP_001, Type Deposit, Amount 500, Description ""Salary deposit"" and Balance B + 500","High","3.1.8"
+"Deposit","TC_DP_004 - Form fields and buttons","Objective: Verify fields in SRS 3.1.8 exist
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Open the Deposit page
+2. Review the form","","Account Number, Amount, Description (textarea), Submit and Reset are present","Medium","3.1.8"
+"Deposit","TC_DP_005 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Reset","Account Number: 185657
+Amount: 500
+Description: Salary deposit","All fields are cleared and no error is displayed","Medium","3.1.8"
+"Deposit","TC_DP_006 - Account Number: blank (DP1)","Objective: Verify blank account is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: (empty) ◄
+Amount: 500
+Description: Salary deposit","E21: ""Account Number must not be blank""","High","DP1"
+"Deposit","TC_DP_007 - Account Number: non-numeric (DP2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+Amount: 500
+Description: Salary deposit","E22: ""Account Number must be numeric"" for each attempt","High","DP2"
+"Deposit","TC_DP_008 - Account Number: does not exist (DP3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 999999999999999 ◄
+Amount: 500
+Description: Salary deposit","E24: ""Account Number not found""","High","DP3"
+"Deposit","TC_DP_009 - Account of another Manager (DP4)","Objective: Verify a Manager cannot deposit into another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: an account of a Manager 2 customer (number not recorded) ◄
+Amount: 500
+Description: Salary deposit","E44 is displayed; no deposit is made","High","DP4"
+"Deposit","TC_DP_010 - Amount: blank (DP5)","Objective: Verify blank amount is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: (empty) ◄
+Description: Salary deposit","E39: ""Amount must not be blank""","High","DP5"
+"Deposit","TC_DP_011 - Amount: non-numeric (DP6)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185657
+Amount:
+   [Attempt 1] abc
+   [Attempt 2] 50@0
+   [Attempt 3] 5 00 ◄
+Description: Salary deposit","E40: ""Amount must be numeric"" for each attempt","High","DP6"
+"Deposit","TC_DP_012 - Amount: zero (DP7)","Objective: Verify zero is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 0 ◄
+Description: Salary deposit","An error is displayed (SRS lists a ""Custom error""); the balance is unchanged","High","DP7"
+"Deposit","TC_DP_013 - Amount: negative","Objective: Verify a negative amount is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: -100 ◄
+Description: Salary deposit","The deposit is rejected and the balance is not reduced","High",""
+"Deposit","TC_DP_014 - Amount: smallest positive value (BVA)","Objective: Verify 0.01 is handled
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 0.01 ◄
+Description: Salary deposit","Deposit succeeds and the balance increases by 0.01, or a clear error is shown (SRS does not define decimals)","Low",""
+"Deposit","TC_DP_015 - Amount: decimal","Objective: Verify a decimal amount is handled exactly
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100.50 ◄
+Description: Salary deposit","The balance increases by exactly 100.50","Medium",""
+"Deposit","TC_DP_016 - Amount: three decimals","Objective: Verify precision handling
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100.555 ◄
+Description: Salary deposit","The value is rejected, or rounded consistently to 2 decimals","Low",""
+"Deposit","TC_DP_017 - Amount: very large value","Objective: Verify overflow is handled gracefully
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 99999999999999999999 (20 digits) ◄
+Description: Salary deposit","A clear error is displayed; no crash, no stack trace and the balance is unchanged","Medium",""
+"Deposit","TC_DP_018 - Description: blank (DP8)","Objective: Verify blank description is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 500
+Description: (empty) ◄","E41: ""Description must not be blank""","High","DP8"
+"Deposit","TC_DP_019 - Description: max length 200 (BVA)","Objective: Verify the 200-character limit
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185657
+Amount: 500
+Description:
+   [Attempt 1] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment (200 characters)
+   [Attempt 2] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment X (201 characters) ◄","200 characters are accepted; the 201st is rejected or truncated","Low",""
+"Deposit","TC_DP_020 - Description: special characters","Objective: Verify common punctuation is accepted
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 500
+Description: Salary & bonus - Oct #2 (50%) ◄","Deposit succeeds and the description is stored exactly (SRS does not restrict characters)","Low",""
+"Deposit","TC_DP_021 - Description: XSS input","Objective: Verify script input is not executed
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 500
+Description: <script>alert('x')</script> ◄","No script is executed on the result page or in Mini Statement; the text is rejected or displayed as plain text","High",""
+"Deposit","TC_DP_022 - Consecutive deposits","Objective: Verify balances accumulate correctly
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Deposit 100 into 185657
+2. Deposit 200 into 185657","Deposit 1: 100
+Deposit 2: 200
+Account Number: 185657","After both deposits the balance is B + 300 and each deposit shows its own updated balance","High","3.1.8"
+"Deposit","TC_DP_023 - Unique Transaction IDs","Objective: Verify each deposit gets a different ID
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Compare the Transaction IDs shown for consecutive deposits","Transaction IDs from the two deposits of TC_DP_022","Every deposit has a different Transaction ID","Medium","3.1.8"
+"Deposit","TC_DP_024 - Other accounts are not affected","Objective: Verify only the target account changes
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Note 185658's balance
+2. Deposit into 185657
+3. Check 185658's balance","Account Number: 185657
+Other account: 185658 (balance noted before)","185658's balance is unchanged after a deposit into 185657","Medium","3.1.8"
+"Deposit","TC_DP_025 - All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Leave all fields empty
+2. Click Submit","Account Number: (empty) ◄
+Amount: (empty) ◄
+Description: (empty) ◄","E21, E39 and E41 are displayed; nothing is deposited","High","General"
+"Deposit","TC_DP_026 - Double submission","Objective: Verify a double click does not deposit twice
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Double-click Submit quickly","Account Number: 185657
+Amount: 500
+Description: Salary deposit","Only one deposit is processed (balance increases by 500 once)","High","General"
+"Deposit","TC_DP_027 - SQL injection in Amount","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B and is associated with this Manager
+3. Deposit page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100' OR '1'='1 ◄
+Description: Salary deposit","E40 is displayed; no database error is shown","Medium","General"
+"Withdrawal","TC_WD_001 - Withdrawal with valid data","Objective: Verify a withdrawal is processed
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 200
+Description: ATM withdrawal","Withdrawal succeeds and the balance becomes B − 200","High","3.1.9"
+"Withdrawal","TC_WD_002 - Balance after withdrawal","Objective: Verify the balance in Balance Enquiry
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Complete TC_WD_001
+2. Open Balance Enquiry and enter 185657","Account Number: 185657
+Expected balance: B − 200","Balance Enquiry shows B − 200","High","3.1.9"
+"Withdrawal","TC_WD_003 - Withdrawal appears in Mini Statement","Objective: Verify the transaction is recorded
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Complete TC_WD_001
+2. Open Mini Statement and enter 185657","Account Number: 185657","The latest row shows Type Withdrawal, Amount 200, Description ""ATM withdrawal"" and Balance B − 200","High","3.1.9"
+"Withdrawal","TC_WD_004 - Form fields and buttons","Objective: Verify fields in SRS 3.1.9 exist
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Open the Withdrawal page
+2. Review the form","","Account Number, Amount, Description (textarea), Submit and Reset are present","Medium","3.1.9"
+"Withdrawal","TC_WD_005 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Reset","Account Number: 185657
+Amount: 200
+Description: ATM withdrawal","All fields are cleared and no error is displayed","Medium","3.1.9"
+"Withdrawal","TC_WD_006 - Amount equal to balance (BVA)","Objective: Verify the full balance can be withdrawn
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: B (current balance of 185657) ◄
+Description: ATM withdrawal","Withdrawal succeeds and the balance becomes 0.00 (SRS: amount <= balance)","High",""
+"Withdrawal","TC_WD_007 - Amount equal to balance minus 1 (BVA)","Objective: Verify a value just below the balance is accepted
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: B − 1 ◄
+Description: ATM withdrawal","Withdrawal succeeds and the balance becomes 1.00","Medium",""
+"Withdrawal","TC_WD_008 - Amount equal to balance plus 1 (BVA)","Objective: Verify a value just above the balance is rejected (WD8)
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: B + 1 ◄
+Description: ATM withdrawal","E42: ""Insufficient balance in source account""; the balance is unchanged","High","WD8"
+"Withdrawal","TC_WD_009 - Withdrawal from zero-balance account","Objective: Verify no withdrawal is possible at zero
+1. Logged in as Manager
+2. An account with balance 0.00 exists (not available, see Test Data Setup)
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: an account with balance 0.00 (not available, see Test Data Setup)
+Amount: 1 ◄
+Description: ATM withdrawal","E42 is displayed; the balance stays 0.00","High",""
+"Withdrawal","TC_WD_010 - Balance never becomes negative","Objective: Verify a further withdrawal after a full withdrawal is rejected
+1. Logged in as Manager
+2. Account 185657 was emptied in TC_WD_006
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657 (emptied in TC_WD_006)
+Amount: 0.01 ◄
+Description: ATM withdrawal","E42 is displayed; the balance remains 0.00 (DB CHECK balance >= 0)","High",""
+"Withdrawal","TC_WD_011 - Failed withdrawal is not recorded","Objective: Verify a rejected withdrawal leaves no transaction
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. After TC_WD_008 open Mini Statement for 185657","Account Number: 185657","Mini Statement shows no row for the rejected withdrawal of TC_WD_008","Medium",""
+"Withdrawal","TC_WD_012 - Account Number: blank (WD1)","Objective: Verify blank account is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: (empty) ◄
+Amount: 200
+Description: ATM withdrawal","E21: ""Account Number must not be blank""","High","WD1"
+"Withdrawal","TC_WD_013 - Account Number: non-numeric (WD2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+Amount: 200
+Description: ATM withdrawal","E22: ""Account Number must be numeric"" for each attempt","High","WD2"
+"Withdrawal","TC_WD_014 - Account Number: does not exist (WD3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 999999999999999 ◄
+Amount: 200
+Description: ATM withdrawal","E24: ""Account Number not found""","High","WD3"
+"Withdrawal","TC_WD_015 - Account of another Manager (WD4)","Objective: Verify a Manager cannot withdraw from another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: an account of a Manager 2 customer (number not recorded) ◄
+Amount: 200
+Description: ATM withdrawal","E44 is displayed; no withdrawal is made","High","WD4"
+"Withdrawal","TC_WD_016 - Amount: blank (WD5)","Objective: Verify blank amount is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: (empty) ◄
+Description: ATM withdrawal","E39: ""Amount must not be blank""","High","WD5"
+"Withdrawal","TC_WD_017 - Amount: non-numeric (WD6)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185657
+Amount:
+   [Attempt 1] abc
+   [Attempt 2] 50@0
+   [Attempt 3] 5 00 ◄
+Description: ATM withdrawal","E40: ""Amount must be numeric"" for each attempt","High","WD6"
+"Withdrawal","TC_WD_018 - Amount: zero (WD7)","Objective: Verify zero is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 0 ◄
+Description: ATM withdrawal","An error is displayed (SRS lists a ""Custom error""); the balance is unchanged","High","WD7"
+"Withdrawal","TC_WD_019 - Amount: negative","Objective: Verify a negative amount is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: -100 ◄
+Description: ATM withdrawal","The withdrawal is rejected and the balance does NOT increase","High",""
+"Withdrawal","TC_WD_020 - Amount: decimal","Objective: Verify a decimal amount is handled exactly
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100.50 ◄
+Description: ATM withdrawal","The balance decreases by exactly 100.50","Medium",""
+"Withdrawal","TC_WD_021 - Amount: three decimals","Objective: Verify precision handling
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100.555 ◄
+Description: ATM withdrawal","The value is rejected, or rounded consistently to 2 decimals","Low",""
+"Withdrawal","TC_WD_022 - Amount: very large value","Objective: Verify overflow is handled gracefully
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 99999999999999999999 (20 digits) ◄
+Description: ATM withdrawal","E42 or a clear error is displayed; no crash, no stack trace and the balance is unchanged","Medium",""
+"Withdrawal","TC_WD_023 - Description: blank (WD9)","Objective: Verify blank description is rejected
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 200
+Description: (empty) ◄","E41: ""Description must not be blank""","High","WD9"
+"Withdrawal","TC_WD_024 - Description: max length 200 (BVA)","Objective: Verify the 200-character limit
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185657
+Amount: 200
+Description:
+   [Attempt 1] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment (200 characters)
+   [Attempt 2] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment X (201 characters) ◄","200 characters are accepted; the 201st is rejected or truncated","Low",""
+"Withdrawal","TC_WD_025 - Description: XSS input","Objective: Verify script input is not executed
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 200
+Description: <script>alert('x')</script> ◄","No script is executed on the result page or in Mini Statement","High",""
+"Withdrawal","TC_WD_026 - Consecutive withdrawals","Objective: Verify balances decrease correctly
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Withdraw 100 from 185657
+2. Withdraw 150 from 185657","Withdrawal 1: 100
+Withdrawal 2: 150
+Account Number: 185657","After both withdrawals the balance is B − 250","High","3.1.9"
+"Withdrawal","TC_WD_027 - All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Leave all fields empty
+2. Click Submit","Account Number: (empty) ◄
+Amount: (empty) ◄
+Description: (empty) ◄","E21, E39 and E41 are displayed; nothing is withdrawn","High","3.1.9"
+"Withdrawal","TC_WD_028 - Double submission","Objective: Verify a double click does not withdraw twice
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Double-click Submit quickly","Account Number: 185657
+Amount: 200
+Description: ATM withdrawal","Only one withdrawal is processed (balance decreases by 200 once)","High","3.1.9"
+"Withdrawal","TC_WD_029 - SQL injection in Amount","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Account 185657 exists with a known balance B (at least 1000) and is associated with this Manager
+3. Withdrawal page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185657
+Amount: 100' OR '1'='1 ◄
+Description: ATM withdrawal","E40 is displayed; no database error is shown","Medium","3.1.9"
+"Fund Transfer","TC_FT_001 - [Manager] Valid transfer between two accounts","Objective: Verify a transfer is processed
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","Transfer succeeds; 185671 becomes B1 − 100 and 185672 becomes B2 + 100; a confirmation is displayed","High","3.1.10"
+"Fund Transfer","TC_FT_002 - [Manager] Balances verified in Balance Enquiry","Objective: Verify both balances after the transfer
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Complete TC_FT_001
+2. Check 185671 and 185672 in Balance Enquiry","Payer Account: 185671 (expected balance: B1 − 100)
+Payee Account: 185672 (expected balance: B2 + 100)","Balance Enquiry shows the expected balance for both accounts","High","3.1.10"
+"Fund Transfer","TC_FT_003 - [Manager] Transfer appears in both Mini Statements","Objective: Verify both sides are recorded
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Complete TC_FT_001
+2. Open Mini Statement for 185671 and 185672","Payer Account: 185671
+Payee Account: 185672","Both statements show a Transfer of 100 with the description ""Rent payment"" and the correct balance after the transaction","High","3.1.10"
+"Fund Transfer","TC_FT_004 - [Manager] Total money is conserved","Objective: Verify no money is created or lost
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Note B1 and B2
+2. Complete TC_FT_001
+3. Compare the sums","Sum before: B1 + B2
+Sum after: 185671 + 185672","The sum of both balances is the same before and after the transfer","High","3.1.10"
+"Fund Transfer","TC_FT_005 - [Manager] Amount equal to payer balance (BVA)","Objective: Verify the full balance can be transferred
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: B1 (payer balance) ◄
+Description: Rent payment","Transfer succeeds and the payer balance becomes 0.00","Medium","3.1.10"
+"Fund Transfer","TC_FT_006 - [Manager] Amount greater than payer balance (FT10)","Objective: Verify insufficient balance is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: B1 + 1 ◄
+Description: Rent payment","E42: ""Insufficient balance in source account""; neither balance changes","High","FT10"
+"Fund Transfer","TC_FT_007 - [Manager] Payer and payee are the same (FT7)","Objective: Verify a self-transfer is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671 ◄
+Payee Account: 185671 (same as payer) ◄
+Amount: 100
+Description: Rent payment","E43: ""Source and destination accounts cannot be same""","High","FT7"
+"Fund Transfer","TC_FT_008 - [Manager] Payer Account: blank (FT1)","Objective: Verify blank payer is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: (empty) ◄
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","E37: ""Payer Account Number must not be blank""","High","FT1"
+"Fund Transfer","TC_FT_009 - [Manager] Payee Account: blank (FT4)","Objective: Verify blank payee is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: (empty) ◄
+Amount: 100
+Description: Rent payment","E38: ""Payee Account Number must not be blank""","High","FT4"
+"Fund Transfer","TC_FT_010 - [Manager] All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Leave all fields empty
+2. Click Submit","Payer Account: (empty) ◄
+Payee Account: (empty) ◄
+Amount: (empty) ◄
+Description: (empty) ◄","E37, E38, E39 and E41 are displayed; nothing is transferred","High",""
+"Fund Transfer","TC_FT_011 - [Manager] Payer Account: non-numeric (FT2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Payer Account:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","E22: ""Account Number must be numeric"" for each attempt","High","FT2"
+"Fund Transfer","TC_FT_012 - [Manager] Payee Account: non-numeric (FT5)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Payer Account: 185671
+Payee Account:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+Amount: 100
+Description: Rent payment","E22: ""Account Number must be numeric"" for each attempt","High","FT5"
+"Fund Transfer","TC_FT_013 - [Manager] Payer Account: does not exist (FT3)","Objective: Verify an unknown payer is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 999999999999999 ◄
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","E24: ""Account Number not found""","High","FT3"
+"Fund Transfer","TC_FT_014 - [Manager] Payee Account: does not exist (FT6)","Objective: Verify an unknown payee is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 999999999999999 ◄
+Amount: 100
+Description: Rent payment","E24: ""Account Number not found""; the payer balance is not reduced","High","FT6"
+"Fund Transfer","TC_FT_015 - [Manager] Amount: blank (FT8)","Objective: Verify blank amount is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: (empty) ◄
+Description: Rent payment","E39: ""Amount must not be blank""","High","FT8"
+"Fund Transfer","TC_FT_016 - [Manager] Amount: non-numeric (FT9)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Payer Account: 185671
+Payee Account: 185672
+Amount:
+   [Attempt 1] abc
+   [Attempt 2] 50@0
+   [Attempt 3] 5 00 ◄
+Description: Rent payment","E40: ""Amount must be numeric"" for each attempt","High","FT9"
+"Fund Transfer","TC_FT_017 - [Manager] Amount: zero","Objective: Verify zero is rejected (SRS 3.1.10: amount > 0)
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 0 ◄
+Description: Rent payment","The transfer is rejected with an error; no balance changes (no error code defined in the SRS)","Medium",""
+"Fund Transfer","TC_FT_018 - [Manager] Amount: negative","Objective: Verify a negative amount cannot reverse the transfer direction
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: -100 ◄
+Description: Rent payment","The transfer is rejected; 185671 does NOT gain money and 185672 does NOT lose money","High",""
+"Fund Transfer","TC_FT_019 - [Manager] Amount: decimal","Objective: Verify a decimal amount is handled exactly
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100.50 ◄
+Description: Rent payment","185671 decreases and 185672 increases by exactly 100.50","Medium",""
+"Fund Transfer","TC_FT_020 - [Manager] Amount: three decimals","Objective: Verify precision handling
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100.555 ◄
+Description: Rent payment","The value is rejected, or rounded consistently on both accounts","Low",""
+"Fund Transfer","TC_FT_021 - [Manager] Description: blank (FT11)","Objective: Verify blank description is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description: (empty) ◄","E41: ""Description must not be blank""","High","FT11"
+"Fund Transfer","TC_FT_022 - [Manager] Description: max length (BVA)","Objective: Verify long descriptions are handled
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description:
+   [Attempt 1] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment (200 characters)
+   [Attempt 2] Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment note 12 Payment X (201 characters) ◄","200 characters are accepted; the 201st is rejected or truncated (SRS defines no limit; DB column is 200)","Low",""
+"Fund Transfer","TC_FT_023 - [Manager] Payer of another Manager (FT13)","Objective: Verify a Manager cannot transfer from another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: an account of a Manager 2 customer (number not recorded) ◄
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","E44 is displayed; no money moves","High","FT13"
+"Fund Transfer","TC_FT_024 - [Manager] Payee of another Manager","Objective: Verify a transfer to another Manager's account (SRS 3.1.10: any accounts)
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: an account of a Manager 2 customer (number not recorded) ◄
+Amount: 100
+Description: Rent payment","Transfer succeeds because the Manager may transfer to any account (document the actual behavior)","Medium",""
+"Fund Transfer","TC_FT_025 - [Manager] Payer with zero balance","Objective: Verify a transfer from an empty account is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: an account with balance 0.00 (not available, see Test Data Setup) ◄
+Payee Account: 185672
+Amount: 1 ◄
+Description: Rent payment","E42 is displayed; no balance changes","High","3.1.10"
+"Fund Transfer","TC_FT_026 - [Manager] Transfer to a deleted account","Objective: Verify a deleted payee is rejected
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: an account deleted earlier (not available, see Test Data Setup) ◄
+Amount: 100
+Description: Rent payment","E24 is displayed; the payer balance is not reduced","Medium","3.1.10"
+"Fund Transfer","TC_FT_027 - [Manager] Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Reset","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","All fields are cleared and no error is displayed","Medium","3.1.10"
+"Fund Transfer","TC_FT_028 - [Manager] Form fields and buttons","Objective: Verify fields in SRS 3.1.10 exist
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Open the Fund Transfer page
+2. Review the form","","Payer Account, Payee Account, Amount, Description (textarea), Submit and Reset are present","Medium","3.1.10"
+"Fund Transfer","TC_FT_029 - [Manager] Double submission","Objective: Verify a double click does not transfer twice
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Double-click Submit quickly","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description: Rent payment","Only one transfer is processed (100 moves once)","High","General"
+"Fund Transfer","TC_FT_030 - [Manager] Description: XSS input","Objective: Verify script input is not executed
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100
+Description: <script>alert('x')</script> ◄","No script is executed on the result page or in Mini Statement","High","General"
+"Fund Transfer","TC_FT_031 - [Manager] SQL injection in Amount","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Payer account 185671 (balance B1) is associated with this Manager and payee account 185672 (balance B2) exists
+3. Fund Transfer page is open","1. Enter the values from Test data
+2. Click Submit","Payer Account: 185671
+Payee Account: 185672
+Amount: 100' OR '1'='1 ◄
+Description: Rent payment","E40 is displayed; no database error is shown","Medium","General"
+"Balance Enquiry","TC_BE_001 - [Manager] Balance of an associated account","Objective: Verify balance and account details are displayed
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Current Balance and account details (Account Number, Customer ID, Account Type) are displayed (""Account Details"" content is not defined in the SRS)","High","3.1.11"
+"Balance Enquiry","TC_BE_002 - [Customer] Balance of own account","Objective: Verify a Customer can view own balance
+1. Logged in as a Customer who owns account 185674
+2. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Current Balance and account details are displayed","High","3.1.11"
+"Balance Enquiry","TC_BE_003 - [Customer] Two accounts show their own balances","Objective: Verify each account returns its own balance
+1. Logged in as a Customer who owns two accounts
+2. Balance Enquiry page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] 185674
+   [Attempt 2] the second account of the same customer (number not recorded) ◄","Each attempt shows the balance of that account only","Medium","3.1.11"
+"Balance Enquiry","TC_BE_004 - Balance after a deposit","Objective: Verify the balance reflects a deposit
+1. Logged in as Manager
+2. A deposit was made into account 185657 (TC_DP_001)
+3. Balance Enquiry page is open","1. Note the balance of account 185657
+2. Deposit into account 185657 (TC_DP_001)
+3. Run Balance Enquiry for account 185657","Account Number: 185657 (account used in TC_DP_001)
+Expected: B + deposit amount","The balance equals the previous balance plus the deposit","High","3.1.11"
+"Balance Enquiry","TC_BE_005 - Balance after a withdrawal","Objective: Verify the balance reflects a withdrawal
+1. Logged in as Manager
+2. A withdrawal was made from account 185657 (TC_WD_001)
+3. Balance Enquiry page is open","1. Note the balance of account 185657
+2. Withdraw from account 185657 (TC_WD_001)
+3. Run Balance Enquiry for account 185657","Account Number: 185657 (account used in TC_WD_001)
+Expected: B − withdrawal amount","The balance equals the previous balance minus the withdrawal","High","3.1.11"
+"Balance Enquiry","TC_BE_006 - Balance after a transfer","Objective: Verify both balances reflect a transfer
+1. Logged in as Manager
+2. A transfer was made between accounts 185671 and 185672 (TC_FT_001)
+3. Balance Enquiry page is open","1. Note both balances
+2. Transfer between accounts 185671 and 185672 (TC_FT_001)
+3. Run Balance Enquiry for both accounts","Payer: 185671
+Payee: 185672 (accounts used in TC_FT_001)","Payer balance decreases and payee balance increases by the transferred amount","High","3.1.11"
+"Balance Enquiry","TC_BE_007 - Balance format","Objective: Verify the balance is shown with two decimals
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674","Balance is shown with a consistent two-decimal format, e.g. 1000.00 (format not defined in the SRS)","Low","3.1.11"
+"Balance Enquiry","TC_BE_008 - Account Number: blank (BE1)","Objective: Verify blank account is rejected
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: (empty) ◄","E21: ""Account Number must not be blank""","High","BE1"
+"Balance Enquiry","TC_BE_009 - Account Number: non-numeric (BE2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E22: ""Account Number must be numeric"" for each attempt","High","BE2"
+"Balance Enquiry","TC_BE_010 - Account Number: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E22 or E24","Low",""
+"Balance Enquiry","TC_BE_011 - Account Number: does not exist (BE3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 999999999999999 ◄","E24: ""Account Number not found""","High","BE3"
+"Balance Enquiry","TC_BE_012 - [Manager] Account of another Manager (BE5)","Objective: Verify a Manager cannot view another Manager's account
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: an account of a Manager 2 customer (number not recorded) ◄","E44 is displayed; no balance is shown","High","BE5"
+"Balance Enquiry","TC_BE_013 - [Customer] Account of another customer (BE4)","Objective: Verify a Customer cannot view someone else's balance
+1. Logged in as a Customer
+2. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: an account of customer 78692 (number not recorded) ◄","E44: ""Account does not belong to you""; no balance is shown","High","BE4"
+"Balance Enquiry","TC_BE_014 - Balance Enquiry is read-only","Objective: Verify enquiring does not change data
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Note the balance and Mini Statement
+2. Run Balance Enquiry
+3. Compare","Account Number: 185674","Balance and Mini Statement are identical before and after the enquiry (no transaction is created)","Low","General"
+"Balance Enquiry","TC_BE_015 - SQL injection in Account Number","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Account 185674 exists and is associated with this Manager
+3. Balance Enquiry page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 1 OR 1=1 ◄","E22 is displayed; no data of other accounts is returned and no database error is shown","Medium","General"
+"Mini Statement","TC_MS_001 - Account with more than 5 transactions","Objective: Verify only the last 5 transactions are shown
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: <185674 ◄","Exactly 5 transactions are displayed and they are the 5 most recent ones","High","3.1.12"
+"Mini Statement","TC_MS_002 - Statement columns","Objective: Verify all columns of SRS 3.1.12 are displayed
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Transaction ID, Date, Type, Amount, Balance and Description are displayed for every row","High","3.1.12"
+"Mini Statement","TC_MS_003 - Account with exactly 5 transactions","Objective: Verify the boundary of 5
+1. Logged in as Manager
+2. Account 185674 has exactly 5 transactions
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 (exactly 5 transactions) ◄","All 5 transactions are displayed","Medium","3.1.12"
+"Mini Statement","TC_MS_004 - Account with fewer than 5 transactions","Objective: Verify all existing transactions are shown
+1. Logged in as Manager
+2. Account 185674 has 1 to 4 transactions
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 (1 to 4 transactions) ◄","All transactions are displayed with no blank or duplicate rows","Medium","3.1.12"
+"Mini Statement","TC_MS_005 - Account with no transactions (MS4)","Objective: Verify the message for an account without transactions
+1. Logged in as Manager
+2. An account with no recorded transaction exists (if the system allows it)
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: an account with no transactions (not available, see Test Data Setup) ◄","An error/message is displayed (SRS lists a ""Custom error""); it is unclear whether the initial deposit counts as a transaction","Medium","MS4, 3.1.12"
+"Mini Statement","TC_MS_006 - Transaction types","Objective: Verify Deposit, Withdrawal and Transfer are labelled correctly
+1. Logged in as Manager
+2. 185674 has at least one deposit, withdrawal and transfer
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Each row shows the right Type (Deposit, Withdrawal or Transfer)","High","3.1.12"
+"Mini Statement","TC_MS_007 - Running balance is consistent","Objective: Verify the Balance column
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","For each row, Balance equals the previous row's Balance plus (Deposit) or minus (Withdrawal) the Amount; the latest Balance equals Balance Enquiry","High","3.1.12"
+"Mini Statement","TC_MS_008 - Amount and description are correct","Objective: Verify data matches what was entered
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Amount and Description of each row match the transaction made","Medium","3.1.12"
+"Mini Statement","TC_MS_009 - Date and time","Objective: Verify the timestamp
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Date shows the correct date and time of each transaction in a consistent format (format not defined in the SRS)","Medium","3.1.12"
+"Mini Statement","TC_MS_010 - Order of transactions","Objective: Verify the ordering
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","Transactions follow a consistent order (most recent first is expected; SRS does not define it)","Low","3.1.12"
+"Mini Statement","TC_MS_011 - New transaction appears immediately","Objective: Verify a fresh transaction is listed
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Make a deposit into 185674
+2. Open Mini Statement for 185674","Account Number: 185674 ◄","A transaction made just before the enquiry appears as the latest row","High","3.1.12"
+"Mini Statement","TC_MS_012 - Transfer appears on both accounts","Objective: Verify both sides of a transfer are listed
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Transfer from account 185674 to account 185671
+2. Open Mini Statement for both accounts","Payer: 185674 Payee: 185671","Both statements show the transfer with its Transaction ID and correct balance after","Medium","3.1.12"
+"Mini Statement","TC_MS_013 - Failed transaction is not listed","Objective: Verify rejected transactions leave no row
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Attempt a withdrawal above the balance of account 185671
+2. Open Mini Statement for account 185671","Account Number: 185671 ◄","A withdrawal rejected with E42 does not appear in the statement","Medium","3.1.12"
+"Mini Statement","TC_MS_014 - Unique Transaction IDs","Objective: Verify each row has a different ID
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185674 ◄","No Transaction ID is repeated","Medium","3.1.12"
+"Mini Statement","TC_MS_015 - Account Number: blank (MS1)","Objective: Verify blank account is rejected
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: (empty) ◄","E21: ""Account Number must not be blank""","High","MS1"
+"Mini Statement","TC_MS_016 - Account Number: non-numeric (MS2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄","E22: ""Account Number must be numeric"" for each attempt","High","MS2"
+"Mini Statement","TC_MS_017 - Account Number: zero, negative, decimal","Objective: Verify unusual numeric values are handled
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] 0
+   [Attempt 2] -5
+   [Attempt 3] 12.5 ◄","Each value is rejected with E22 or E24","Low",""
+"Mini Statement","TC_MS_018 - Account Number: does not exist (MS3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 999999999999999 ◄","E24: ""Account Number not found""","High","MS3"
+"Mini Statement","TC_MS_019 - [Manager] Account of another Manager (MS6)","Objective: Verify a Manager cannot view another Manager's statement
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 185672 (account of another Manager) ◄","E44 is displayed","High","MS6"
+"Mini Statement","TC_MS_020 - SQL injection in Account Number","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager
+2. Account 185674 has more than 5 transactions and is associated with this Manager
+3. Mini Statement page is open","1. Enter the Account Number from Test data
+2. Click Submit","Account Number: 1 OR 1=1 ◄","E22 is displayed; no data of other accounts is returned","Medium","General"
+"Customized Statement","TC_CS_001 - Valid date range with transactions","Objective: Verify transactions within the range are listed
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","All transactions of 185674 in the range are displayed with their details","High","3.1.13"
+"Customized Statement","TC_CS_002 - Range with no transactions","Objective: Verify an empty result
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: 2020-01-01 ◄
+To Date: 2020-01-31 ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","No transactions are listed and a clear message is shown (not defined in the SRS)","Medium","3.1.13"
+"Customized Statement","TC_CS_003 - From Date equal to To Date (BVA)","Objective: Verify a single-day range
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date ◄
+To Date: Execution date ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","Transactions made on that day are included","High","3.1.13"
+"Customized Statement","TC_CS_004 - Day without transactions","Objective: Verify the day boundary
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 1 day ◄
+To Date: Execution date − 1 day ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","Transactions made today are not included","Medium","3.1.13"
+"Customized Statement","TC_CS_005 - From Date greater than To Date (CS6)","Objective: Verify an inverted range is rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date ◄
+To Date: Execution date − 7 days ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E32: ""From Date cannot be greater than To Date""","High","CS6"
+"Customized Statement","TC_CS_006 - From Date: blank (CS4)","Objective: Verify blank From Date is rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: (empty) ◄
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E30: ""From Date field must not be blank""","High","CS4"
+"Customized Statement","TC_CS_007 - To Date: blank (CS5)","Objective: Verify blank To Date is rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: (empty) ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E31: ""To Date field must not be blank""","High","CS5"
+"Customized Statement","TC_CS_008 - Both dates blank","Objective: Verify both date errors
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: (empty) ◄
+To Date: (empty) ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E30 and E31 are displayed","Medium",""
+"Customized Statement","TC_CS_009 - Invalid date format","Objective: Verify invalid dates are rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185674
+From Date:
+   [Attempt 1] 31/02/2025
+   [Attempt 2] abc ◄
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E57: ""Invalid date format"" for each attempt","Medium",""
+"Customized Statement","TC_CS_010 - Future date range","Objective: Verify a future range is handled
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date + 1 day ◄
+To Date: Execution date + 7 days ◄
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","No transactions are listed, or a clear message is shown","Low",""
+"Customized Statement","TC_CS_011 - Min Transaction Value filter","Objective: Verify the amount filter
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: 250 ◄
+Number of Transactions: (empty)","Only transactions with amount greater than (or equal to) 250 are listed; state whether the 250 transaction is included (not defined in the SRS)","High","3.1.13"
+"Customized Statement","TC_CS_012 - Number of Transactions filter","Objective: Verify the count filter
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: 3 ◄","At most 3 transactions are listed (the SRS does not state which ones)","High","3.1.13"
+"Customized Statement","TC_CS_013 - Combined filters","Objective: Verify dates, amount and count together
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: 250 ◄
+Number of Transactions: 2 ◄","At most 2 transactions, all of amount >= 250 and inside the date range, are listed","High","3.1.13"
+"Customized Statement","TC_CS_014 - Number larger than available","Objective: Verify a large count returns all matches
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: 100 ◄","All matching transactions are listed with no error","Low","3.1.13"
+"Customized Statement","TC_CS_015 - Min Transaction Value: non-numeric (CS7)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value:
+   [Attempt 1] abc
+   [Attempt 2] 2@0 ◄
+Number of Transactions: (empty)","E34: ""Minimum Transaction Value must be numeric"" for each attempt","High","CS7"
+"Customized Statement","TC_CS_016 - Number of Transactions: non-numeric (CS8)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions:
+   [Attempt 1] abc
+   [Attempt 2] 2@ ◄","E36: ""Number of Transaction must be numeric"" for each attempt","High","CS8"
+"Customized Statement","TC_CS_017 - Optional fields left blank","Objective: Verify the optional fields (SRS 3.1.13)
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","The statement is produced without E33 or E35 (SRS conflict: E33 and E35 say these fields must not be blank)","High",""
+"Customized Statement","TC_CS_018 - Min Transaction Value: zero and negative","Objective: Verify unusual values
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value:
+   [Attempt 1] 0
+   [Attempt 2] -100 ◄
+Number of Transactions: (empty)","Behavior is consistent: zero returns all transactions; a negative value is rejected or ignored (not defined in the SRS)","Low",""
+"Customized Statement","TC_CS_019 - Number of Transactions: zero and negative","Objective: Verify unusual values
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions:
+   [Attempt 1] 0
+   [Attempt 2] -3 ◄","Behavior is consistent and no error page or crash occurs (not defined in the SRS)","Low",""
+"Customized Statement","TC_CS_020 - Min Transaction Value: decimal","Objective: Verify a decimal filter
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: 100.50 ◄
+Number of Transactions: (empty)","The filter is applied correctly or a clear error is shown","Low",""
+"Customized Statement","TC_CS_021 - Account Number: blank (CS1)","Objective: Verify blank account is rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: (empty) ◄
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E21: ""Account Number must not be blank""","High","CS1"
+"Customized Statement","TC_CS_022 - Account Number: non-numeric (CS2)","Objective: Verify letters and symbols are rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Account Number:
+   [Attempt 1] ABC123
+   [Attempt 2] 12@#45 ◄
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E22: ""Account Number must be numeric"" for each attempt","High","CS2"
+"Customized Statement","TC_CS_023 - Account Number: does not exist (CS3)","Objective: Verify an unknown account is rejected
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 999999999999999 ◄
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E24: ""Account Number not found""","High","CS3"
+"Customized Statement","TC_CS_024 - [Manager] Account of another Manager (CS10)","Objective: Verify a Manager cannot view another Manager's statement
+1. A second Manager account exists (Manager 2) and owns customer/account that are NOT associated with Manager 1
+2. Logged in as Manager 1
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: an account of a Manager 2 customer (number not recorded) ◄
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","E44 is displayed","High","CS10"
+"Customized Statement","TC_CS_025 - Statement columns","Objective: Verify the displayed columns
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Submit","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: (empty)
+Number of Transactions: (empty)","Transaction ID, Date, Type, Amount, Balance and Description are displayed (columns are not defined for this module in the SRS; same as Mini Statement expected)","Medium","3.1.13"
+"Customized Statement","TC_CS_026 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Enter the values from Test data
+2. Click Reset","Account Number: 185674
+From Date: Execution date − 7 days
+To Date: Execution date
+Min Transaction Value: 250 ◄
+Number of Transactions: 3 ◄","All fields are cleared and no error is displayed","Medium","3.1.13"
+"Customized Statement","TC_CS_027 - Form fields and buttons","Objective: Verify fields in SRS 3.1.13 exist
+1. Logged in as Manager
+2. Account 185674 has at least 6 transactions made today with amounts such as 50, 100, 250, 500, 1000 and 2000
+3. Customized Statement page is open","1. Open the Customized Statement page
+2. Review the form","","Account Number, From Date (date picker), To Date (date picker), Min Transaction Value, Number of Transactions, Submit and Reset are present","Medium","3.1.13"
+"Change Password","TC_CP_001 - [Manager] Change password with valid data","Objective: Verify the password is changed
+1. Logged in as Manager (current password rUqyzUv)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: rUqyzUv
+New Password: NewPass@456
+Confirm Password: NewPass@456","The password is changed and a confirmation is displayed (message not defined in the SRS)","High","3.1.14"
+"Change Password","TC_CP_002 - Login with the new password","Objective: Verify the new password works
+1. Password was changed in TC_CP_001","1. Log out
+2. Log in with the new password","User ID: mngr668217
+Password: NewPass@456","Login succeeds","High","3.1.14"
+"Change Password","TC_CP_003 - Old password no longer works","Objective: Verify the old password is rejected
+1. Password was changed in TC_CP_001","1. Log out
+2. Log in with the old password","User ID: mngr668217
+Password: rUqyzUv","E3: ""User ID and Password do not match""","High","3.1.14"
+"Change Password","TC_CP_004 - Old Password: blank (CP1)","Objective: Verify blank old password is rejected
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: (empty) ◄
+New Password: NewPass@789
+Confirm Password: NewPass@789","E25: ""Old Password must not be blank""","High","CP1"
+"Change Password","TC_CP_005 - New Password: blank (CP3)","Objective: Verify blank new password is rejected
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: NewPass@456
+New Password: (empty) ◄
+Confirm Password: NewPass@789","E26: ""New Password must not be blank""","High","CP3"
+"Change Password","TC_CP_006 - Confirm Password: blank (CP5)","Objective: Verify blank confirmation is rejected
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: NewPass@456
+New Password: NewPass@789
+Confirm Password: (empty) ◄","E27: ""Confirm Password must not be blank""","High","CP5"
+"Change Password","TC_CP_007 - All fields blank","Objective: Verify all required-field errors
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Leave all fields empty
+2. Click Submit","Old Password: (empty) ◄
+New Password: (empty) ◄
+Confirm Password: (empty) ◄","E25, E26 and E27 are displayed","High",""
+"Change Password","TC_CP_008 - Old Password: incorrect (CP2)","Objective: Verify a wrong old password is rejected
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Wrong@999 ◄
+New Password: NewPass@789
+Confirm Password: NewPass@789","E29: ""Old Password is incorrect""","High","CP2"
+"Change Password","TC_CP_009 - Old Password: wrong letter case","Objective: Verify the old password is case-sensitive
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: newpass@456 ◄ (current password in lowercase)
+New Password: NewPass@789
+Confirm Password: NewPass@789","E29 is displayed","Medium",""
+"Change Password","TC_CP_010 - New Password: 5 characters (CP4, BVA)","Objective: Verify the 6-character minimum
+1. Logged in as Manager (current password NewPass@456)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: NewPass@456
+New Password: Ab@12 ◄
+Confirm Password: Ab@12 ◄","The password is rejected with an error (SRS lists a ""Custom error""); the password is unchanged","High","CP4"
+"Change Password","TC_CP_011 - New Password: 6 characters (BVA)","Objective: Verify the minimum length is accepted
+1. Logged in as Manager (current password Ab@12)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Ab@12 (set in TC_CP_010)
+New Password: Ab@123 ◄
+Confirm Password: Ab@123 ◄","The password is changed successfully","High",""
+"Change Password","TC_CP_012 - New and Confirm Password do not match (CP6)","Objective: Verify a mismatch is rejected
+1. Logged in as Manager (current password Ab@123)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Ab@123
+New Password: NewPass@789
+Confirm Password: Different@789 ◄","E28: ""Passwords do not match""","High","CP6"
+"Change Password","TC_CP_013 - Mismatch only in letter case","Objective: Verify the comparison is case-sensitive
+1. Logged in as Manager (current password Ab@123)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Ab@123
+New Password: NewPass@789
+Confirm Password: newpass@789 ◄","E28 is displayed","Medium",""
+"Change Password","TC_CP_014 - New Password same as Old Password","Objective: Verify behavior when nothing changes
+1. Logged in as Manager (current password Ab@123)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Ab@123
+New Password: Ab@123 ◄
+Confirm Password: Ab@123 ◄","Behavior is consistent (rejected, or accepted); the SRS does not define it","Low",""
+"Change Password","TC_CP_015 - New Password: max length (BVA)","Objective: Verify long passwords are handled
+1. Logged in as Manager (current password Ab@123)
+2. Change Password page is open","1. Enter the Attempt 1 value (other fields valid), click Submit
+2. Repeat for each remaining attempt","Old Password:
+   [Attempt 1] Ab@123
+   [Attempt 2] Ab@123xxxxxxxxxxxxxxxxxxxxxxxx (set in attempt 1)
+New Password:
+   [Attempt 1] Ab@123xxxxxxxxxxxxxxxxxxxxxxxx (30 characters) ◄
+   [Attempt 2] Ab@123xxxxxxxxxxxxxxxxxxxxxxxxx (31 characters) ◄
+Confirm Password: (same as New Password)","30 characters are accepted (Login allows 30); the 31st is rejected or truncated; no max is stated for this module","Low",""
+"Change Password","TC_CP_016 - New Password: special characters","Objective: Verify symbols are accepted
+1. Logged in as Manager (current password Ab@123xxxxxxxxxxxxxxxxxxxxxxxxx)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: Ab@123xxxxxxxxxxxxxxxxxxxxxxxxx (set in TC_CP_015)
+New Password: P@$$w0rd!#% ◄
+Confirm Password: P@$$w0rd!#% ◄","The password is changed and the new password works at login","Medium",""
+"Change Password","TC_CP_017 - New Password: contains spaces","Objective: Verify spaces are handled
+1. Logged in as Manager (current password P@$$w0rd!#%)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: P@$$w0rd!#% (set in TC_CP_016)
+New Password: P@ss word 1 ◄
+Confirm Password: P@ss word 1 ◄","Behavior is consistent (accepted and works at login, or rejected); not defined in the SRS","Low",""
+"Change Password","TC_CP_018 - Password fields are masked","Objective: Verify all three fields hide the input
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Type in each password field","Old Password: P@ss word 1 (set in TC_CP_017)
+New Password: NewPass@789
+Confirm Password: NewPass@789","Characters in Old, New and Confirm Password appear as dots/asterisks","High","3.1.14"
+"Change Password","TC_CP_019 - Reset button","Objective: Verify Reset clears the form
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Reset","Old Password: P@ss word 1
+New Password: NewPass@789
+Confirm Password: NewPass@789","All fields are cleared and no error is displayed","Medium","3.1.14"
+"Change Password","TC_CP_020 - Form fields and buttons","Objective: Verify fields in SRS 3.1.14 exist
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Open the Change Password page
+2. Review the form","","Old Password, New Password, Confirm Password, Submit and Reset are present","Medium","3.1.14"
+"Change Password","TC_CP_021 - Failed change keeps the password","Objective: Verify a rejected change does not alter the password
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Submit the form (error expected)
+2. Log out and log in with the original password","Old Password: P@ss word 1
+New Password: NewPass@789
+Confirm Password: Different@789 ◄","After E28, logging in with the original password still works","High","3.1.14"
+"Change Password","TC_CP_022 - Session after password change","Objective: Verify what happens to the active session
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Change the password
+2. Click any menu link","","Behavior is consistent (stay logged in, or forced to log in again); not defined in the SRS","Low","3.1.14"
+"Change Password","TC_CP_023 - SQL injection in Old Password","Objective: Verify basic SQL input is handled safely
+1. Logged in as Manager (current password P@ss word 1)
+2. Change Password page is open","1. Enter the values from Test data
+2. Click Submit","Old Password: ' OR '1'='1 ◄
+New Password: NewPass@789
+Confirm Password: NewPass@789","E29 is displayed; the password is not changed and no database error is shown","Medium","General"
